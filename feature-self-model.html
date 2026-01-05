@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>三个自我协作模型 | 美丽的心灵地图</title>
+    <meta name="description" content="原创心理学模型：镜像自我、地图自我、定锚自我，帮助理解内在决策机制">
+    <link rel="icon" type="image/png" href="https://docs.bccsw.cn/favicon.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500&family=Noto+Serif+SC:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap">
+    <style>
+        :root {
+            --color-bg: #FAFAF9;
+            --color-bg-alt: #F5F5F4;
+            --color-surface: #FFFFFF;
+            --color-text: #3D3D3D;
+            --color-text-light: #737373;
+            --color-text-muted: #A3A3A3;
+            --color-border: #E5E5E5;
+            --color-border-light: #F0F0F0;
+            --color-primary: #9B8AA6;
+            --color-primary-light: #C9BED4;
+            --color-accent: #E8B4B8;
+            --color-accent-warm: #F5E6D3;
+            --font-sans: 'Noto Sans SC', -apple-system, sans-serif;
+            --font-serif: 'Noto Serif SC', Georgia, serif;
+        }
+
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            font-size: 16px;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-sans);
+            color: var(--color-text);
+            background: var(--color-bg);
+            line-height: 1.8;
+            letter-spacing: 0.02em;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header */
+        .header {
+            background: var(--color-surface);
+            border-bottom: 1px solid var(--color-border-light);
+            padding: 1rem 1.5rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-inner {
+            max-width: 1000px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            text-decoration: none;
+            color: var(--color-text);
+        }
+
+        .logo img {
+            height: 32px;
+        }
+
+        .logo-text {
+            font-size: 0.9rem;
+            font-weight: 400;
+            color: var(--color-text-light);
+            letter-spacing: 0.05em;
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--color-text-light);
+            text-decoration: none;
+            font-size: 0.875rem;
+            padding: 0.5rem 1rem;
+            border-radius: 100px;
+            transition: all 0.2s ease;
+        }
+
+        .back-btn:hover {
+            background: var(--color-bg-alt);
+            color: var(--color-text);
+        }
+
+        /* Main Content */
+        .main {
+            flex: 1;
+            padding: 3rem 1.5rem;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: var(--color-primary-light);
+            border-radius: 100px;
+            font-size: 0.8rem;
+            color: var(--color-primary);
+            margin-bottom: 1.5rem;
+        }
+
+        .hero-title {
+            font-family: var(--font-serif);
+            font-size: clamp(1.75rem, 4vw, 2.5rem);
+            font-weight: 600;
+            margin-bottom: 1rem;
+            line-height: 1.3;
+        }
+
+        .hero-subtitle {
+            font-size: 1.1rem;
+            color: var(--color-text-light);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Decorative Images */
+        .hero-decor {
+            position: absolute;
+            border-radius: 50%;
+            object-fit: cover;
+            opacity: 0.15;
+            z-index: -1;
+        }
+
+        .hero-decor-1 {
+            width: 150px;
+            height: 150px;
+            top: -30px;
+            right: 5%;
+            animation: gentleFloat 6s ease-in-out infinite;
+        }
+
+        .hero-decor-2 {
+            width: 100px;
+            height: 100px;
+            bottom: -20px;
+            left: 10%;
+            animation: gentleFloat 7s ease-in-out infinite 1s;
+        }
+
+        @keyframes gentleFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        /* Cards Grid */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .self-card {
+            background: var(--color-surface);
+            border: 1px solid var(--color-border-light);
+            border-radius: 16px;
+            padding: 2rem 1.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .self-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--card-accent);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .self-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(0,0,0,0.08);
+            border-color: var(--card-accent);
+        }
+
+        .self-card:hover::before {
+            opacity: 1;
+        }
+
+        .card-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 1.5rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--card-bg);
+            position: relative;
+        }
+
+        .card-icon img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .card-icon .material-symbols-outlined {
+            font-size: 36px;
+            color: var(--card-accent);
+            position: absolute;
+            bottom: -5px;
+            right: -5px;
+            background: var(--color-surface);
+            border-radius: 50%;
+            padding: 4px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .card-title {
+            font-family: var(--font-serif);
+            font-size: 1.25rem;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            color: var(--card-accent);
+        }
+
+        .card-subtitle {
+            font-size: 0.85rem;
+            color: var(--color-text-muted);
+            margin-bottom: 1rem;
+        }
+
+        .card-desc {
+            font-size: 0.9rem;
+            color: var(--color-text-light);
+            line-height: 1.7;
+        }
+
+        /* Card Accent Colors */
+        .self-card.mirror { --card-accent: #9B8AA6; --card-bg: #F3EFF6; }
+        .self-card.map { --card-accent: #7BA3A8; --card-bg: #EBF3F4; }
+        .self-card.anchor { --card-accent: #B89B7A; --card-bg: #F5F0EB; }
+
+        /* Detail Section */
+        .detail-section {
+            background: var(--color-surface);
+            border-radius: 20px;
+            padding: 3rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--color-border-light);
+        }
+
+        .detail-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid var(--color-border-light);
+        }
+
+        .detail-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--color-primary-light);
+        }
+
+        .detail-title {
+            font-family: var(--font-serif);
+            font-size: 1.5rem;
+            font-weight: 500;
+            margin-bottom: 0.25rem;
+        }
+
+        .detail-subtitle {
+            font-size: 0.9rem;
+            color: var(--color-text-muted);
+        }
+
+        .detail-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        .detail-text h4 {
+            font-size: 1rem;
+            font-weight: 500;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .detail-text h4 .material-symbols-outlined {
+            font-size: 18px;
+            color: var(--color-primary);
+        }
+
+        .detail-text p {
+            font-size: 0.9rem;
+            color: var(--color-text-light);
+            margin-bottom: 1rem;
+            line-height: 1.8;
+        }
+
+        .detail-text ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .detail-text li {
+            font-size: 0.9rem;
+            color: var(--color-text-light);
+            padding: 0.5rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        .detail-text li::before {
+            content: '✦';
+            position: absolute;
+            left: 0;
+            color: var(--color-primary);
+            font-size: 0.75rem;
+        }
+
+        .detail-image {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .detail-image img {
+            max-width: 100%;
+            border-radius: 12px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+        }
+
+        /* Summary Box */
+        .summary-box {
+            background: linear-gradient(135deg, var(--color-accent-warm) 0%, var(--color-primary-light) 100%);
+            border-radius: 16px;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .summary-box h3 {
+            font-family: var(--font-serif);
+            font-size: 1.25rem;
+            margin-bottom: 1rem;
+        }
+
+        .summary-box p {
+            font-size: 0.95rem;
+            color: var(--color-text-light);
+            max-width: 600px;
+            margin: 0 auto 1.5rem;
+        }
+
+        .cta-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            background: var(--color-surface);
+            color: var(--color-text);
+            border-radius: 100px;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .cta-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--color-surface);
+            border-top: 1px solid var(--color-border-light);
+            padding: 2rem 1.5rem;
+            text-align: center;
+        }
+
+        .footer-content {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .footer-logo {
+            height: 36px;
+            opacity: 0.7;
+            margin-bottom: 1rem;
+        }
+
+        .footer-text {
+            font-size: 0.8rem;
+            color: var(--color-text-muted);
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-link {
+            color: var(--color-text-light);
+            text-decoration: none;
+        }
+
+        .footer-link:hover {
+            color: var(--color-text);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .cards-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .detail-content {
+                grid-template-columns: 1fr;
+            }
+
+            .detail-image {
+                order: -1;
+            }
+
+            .detail-section {
+                padding: 1.5rem;
+            }
+
+            .hero-decor {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-inner">
+            <a href="index.html" class="logo">
+                <img src="https://docs.bccsw.cn/logo.png" alt="Logo">
+                <span class="logo-text">美丽的心灵地图</span>
+            </a>
+            <a href="index.html#features" class="back-btn">
+                <span class="material-symbols-outlined">arrow_back</span>
+                返回首页
+            </a>
+        </div>
+    </header>
+
+    <!-- Main -->
+    <main class="main">
+        <div class="container">
+            <!-- Hero -->
+            <section class="hero">
+                <img src="" alt="" class="hero-decor hero-decor-1" id="decor1">
+                <img src="" alt="" class="hero-decor hero-decor-2" id="decor2">
+                <div class="hero-badge">
+                    <span class="material-symbols-outlined">hub</span>
+                    本书特色 · 原创理论
+                </div>
+                <h1 class="hero-title">三个自我协作模型</h1>
+                <p class="hero-subtitle">理解你内在的决策系统，发现镜像自我、地图自我与定锚自我如何协同工作，帮助你做出更明智的美丽决策</p>
+            </section>
+
+            <!-- Three Cards -->
+            <section class="cards-grid">
+                <div class="self-card mirror">
+                    <div class="card-icon">
+                        <img src="" alt="" id="mirrorImg">
+                        <span class="material-symbols-outlined">visibility</span>
+                    </div>
+                    <h3 class="card-title">镜像自我</h3>
+                    <p class="card-subtitle">Mirror Self</p>
+                    <p class="card-desc">他人眼中的形象投射，关注外在评价与社会认同</p>
+                </div>
+                <div class="self-card map">
+                    <div class="card-icon">
+                        <img src="" alt="" id="mapImg">
+                        <span class="material-symbols-outlined">map</span>
+                    </div>
+                    <h3 class="card-title">地图自我</h3>
+                    <p class="card-subtitle">Map Self</p>
+                    <p class="card-desc">理性分析和规划能力，负责信息收集与方案评估</p>
+                </div>
+                <div class="self-card anchor">
+                    <div class="card-icon">
+                        <img src="" alt="" id="anchorImg">
+                        <span class="material-symbols-outlined">anchor</span>
+                    </div>
+                    <h3 class="card-title">定锚自我</h3>
+                    <p class="card-subtitle">Anchor Self</p>
+                    <p class="card-desc">内在价值和核心自信，是心理稳定的压舱石</p>
+                </div>
+            </section>
+
+            <!-- Detail 1: Mirror Self -->
+            <section class="detail-section">
+                <div class="detail-header">
+                    <img src="" alt="" class="detail-icon" id="detail1Img">
+                    <div>
+                        <h2 class="detail-title">镜像自我：社会之镜</h2>
+                        <p class="detail-subtitle">我们通过他人的眼睛看见自己</p>
+                    </div>
+                </div>
+                <div class="detail-content">
+                    <div class="detail-text">
+                        <h4><span class="material-symbols-outlined">psychology</span> 核心机制</h4>
+                        <p>镜像自我源于社会学家库利的"镜中我"理论。我们不断通过想象他人如何看待我们来形成自我认知。在医美决策中，镜像自我是驱动变美欲望的重要力量。</p>
+
+                        <h4><span class="material-symbols-outlined">warning</span> 需要警惕</h4>
+                        <ul>
+                            <li>过度依赖外在评价定义自我价值</li>
+                            <li>将想象中的他人评价当作事实</li>
+                            <li>陷入"永远不够好"的完美主义陷阱</li>
+                            <li>社交媒体比较带来的焦虑</li>
+                        </ul>
+                    </div>
+                    <div class="detail-image">
+                        <img src="" alt="镜像自我示意" id="mirrorDetailImg">
+                    </div>
+                </div>
+            </section>
+
+            <!-- Detail 2: Map Self -->
+            <section class="detail-section">
+                <div class="detail-header">
+                    <img src="" alt="" class="detail-icon" id="detail2Img">
+                    <div>
+                        <h2 class="detail-title">地图自我：理性导航</h2>
+                        <p class="detail-subtitle">用逻辑和数据规划美丽路径</p>
+                    </div>
+                </div>
+                <div class="detail-content">
+                    <div class="detail-image">
+                        <img src="" alt="地图自我示意" id="mapDetailImg">
+                    </div>
+                    <div class="detail-text">
+                        <h4><span class="material-symbols-outlined">analytics</span> 核心能力</h4>
+                        <p>地图自我是你内在的分析师和规划师。它负责收集信息、评估风险、比较方案、制定计划。强大的地图自我能帮助你做出理性、明智的决策。</p>
+
+                        <h4><span class="material-symbols-outlined">checklist</span> 主要功能</h4>
+                        <ul>
+                            <li>收集和分析医美机构与项目信息</li>
+                            <li>评估风险收益比和投资回报</li>
+                            <li>制定分阶段的美丽规划</li>
+                            <li>识别营销话术和决策陷阱</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Detail 3: Anchor Self -->
+            <section class="detail-section">
+                <div class="detail-header">
+                    <img src="" alt="" class="detail-icon" id="detail3Img">
+                    <div>
+                        <h2 class="detail-title">定锚自我：内在力量</h2>
+                        <p class="detail-subtitle">无论外在如何变化，核心价值始终稳固</p>
+                    </div>
+                </div>
+                <div class="detail-content">
+                    <div class="detail-text">
+                        <h4><span class="material-symbols-outlined">favorite</span> 核心价值</h4>
+                        <p>定锚自我是你心理的压舱石。它代表着你的核心价值观、内在自信和自我认同。强大的定锚自我让你能够接受自己的不完美，不被外在评价左右。</p>
+
+                        <h4><span class="material-symbols-outlined">self_improvement</span> 培养方法</h4>
+                        <ul>
+                            <li>练习自我慈悲，接纳真实的自己</li>
+                            <li>建立基于内在价值的自尊</li>
+                            <li>发展多元化的自我认同维度</li>
+                            <li>正念练习，活在当下</li>
+                        </ul>
+                    </div>
+                    <div class="detail-image">
+                        <img src="" alt="定锚自我示意" id="anchorDetailImg">
+                    </div>
+                </div>
+            </section>
+
+            <!-- Summary -->
+            <section class="summary-box">
+                <h3>三个自我的协作平衡</h3>
+                <p>健康的美丽决策来自三个自我的协调配合：镜像自我提供动力，地图自我提供方法，定锚自我提供稳定。当任何一个自我过于强势或缺失，都可能导致决策失衡。</p>
+                <a href="reader.html?file=06-self-system.md" class="cta-btn">
+                    <span class="material-symbols-outlined">menu_book</span>
+                    深入阅读第五章
+                </a>
+            </section>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <img src="https://docs.bccsw.cn/logo.png" alt="Logo" class="footer-logo">
+            <p class="footer-text">《美丽的心灵地图》— 医美消费心理学指南</p>
+            <p class="footer-text">
+                © 重庆联合丽格科技有限公司 ·
+                <a href="https://beian.miit.gov.cn/" target="_blank" class="footer-link">渝ICP备2024023473号</a>
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        // Random decorative images
+        const images = {
+            portrait: Array.from({length: 18}, (_, i) => `images/portrait-${String(i+1).padStart(2, '0')}.jpg`),
+            aiart: Array.from({length: 30}, (_, i) => `images/aiart-${String(i+1).padStart(2, '0')}.jpg`)
+        };
+
+        function getRandomImage(arr) {
+            return arr[Math.floor(Math.random() * arr.length)];
+        }
+
+        // Assign images
+        document.getElementById('decor1').src = getRandomImage(images.portrait);
+        document.getElementById('decor2').src = getRandomImage(images.aiart);
+        document.getElementById('mirrorImg').src = getRandomImage(images.portrait);
+        document.getElementById('mapImg').src = getRandomImage(images.portrait);
+        document.getElementById('anchorImg').src = getRandomImage(images.portrait);
+        document.getElementById('detail1Img').src = getRandomImage(images.portrait);
+        document.getElementById('detail2Img').src = getRandomImage(images.portrait);
+        document.getElementById('detail3Img').src = getRandomImage(images.portrait);
+        document.getElementById('mirrorDetailImg').src = getRandomImage(images.aiart);
+        document.getElementById('mapDetailImg').src = getRandomImage(images.aiart);
+        document.getElementById('anchorDetailImg').src = getRandomImage(images.aiart);
+    </script>
+</body>
+</html>

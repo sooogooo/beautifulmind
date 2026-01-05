@@ -640,6 +640,30 @@
             border: var(--border-light);
             border-radius: 12px;
             background: var(--color-bg);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .feature-card:hover {
+            border-color: var(--color-primary);
+            transform: translateY(-4px);
+            box-shadow: 0 12px 32px rgba(0,0,0,0.08);
+        }
+
+        .feature-card::after {
+            content: '了解更多 →';
+            display: block;
+            margin-top: var(--spacing-sm);
+            font-size: 0.8rem;
+            color: var(--color-primary);
+            opacity: 0;
+            transform: translateX(-10px);
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover::after {
+            opacity: 1;
+            transform: translateX(0);
         }
 
         .feature-card h3 {
@@ -1135,7 +1159,7 @@
             </div>
 
             <div class="features-grid">
-                <div class="feature-card">
+                <a href="feature-self-model.html" class="feature-card" style="text-decoration: none; color: inherit;">
                     <h3>
                         <span class="material-symbols-outlined">hub</span>
                         三个自我协作模型
@@ -1146,8 +1170,8 @@
                         <li><strong>地图自我</strong>：理性分析和规划能力</li>
                         <li><strong>定锚自我</strong>：内在价值和核心自信</li>
                     </ul>
-                </div>
-                <div class="feature-card">
+                </a>
+                <a href="feature-lever-types.html" class="feature-card" style="text-decoration: none; color: inherit;">
                     <h3>
                         <span class="material-symbols-outlined">tune</span>
                         美丽杠杆类型学
@@ -1158,8 +1182,8 @@
                         <li><strong>增益型杠杆</strong>：优化提升</li>
                         <li>个性化策略指导</li>
                     </ul>
-                </div>
-                <div class="feature-card">
+                </a>
+                <a href="feature-decision-flow.html" class="feature-card" style="text-decoration: none; color: inherit;">
                     <h3>
                         <span class="material-symbols-outlined">route</span>
                         8步科学决策流程
@@ -1171,8 +1195,8 @@
                         <li>市场调研与机构筛选</li>
                         <li>决策评估与效果复盘</li>
                     </ul>
-                </div>
-                <div class="feature-card">
+                </a>
+                <a href="feature-toolkit.html" class="feature-card" style="text-decoration: none; color: inherit;">
                     <h3>
                         <span class="material-symbols-outlined">inventory_2</span>
                         60+实用工具包
@@ -1184,7 +1208,7 @@
                         <li>沟通交流类：话术指南、冲突解决</li>
                         <li>监测管理类：心理健康、效果评估</li>
                     </ul>
-                </div>
+                </a>
             </div>
         </div>
     </section>

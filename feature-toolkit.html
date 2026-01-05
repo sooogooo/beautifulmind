@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>60+实用工具包 | 美丽的心灵地图</title>
+    <meta name="description" content="科学设计的评估和管理工具：自我认知、决策支持、沟通交流、监测管理四大类别">
+    <link rel="icon" type="image/png" href="https://docs.bccsw.cn/favicon.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500&family=Noto+Serif+SC:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap">
+    <style>
+        :root {
+            --color-bg: #FAFAF9;
+            --color-bg-alt: #F5F5F4;
+            --color-surface: #FFFFFF;
+            --color-text: #3D3D3D;
+            --color-text-light: #737373;
+            --color-text-muted: #A3A3A3;
+            --color-border: #E5E5E5;
+            --color-border-light: #F0F0F0;
+            --color-primary: #9B8AA6;
+            --color-primary-light: #C9BED4;
+            --color-accent: #E8B4B8;
+            --color-accent-warm: #F5E6D3;
+            --font-sans: 'Noto Sans SC', -apple-system, sans-serif;
+            --font-serif: 'Noto Serif SC', Georgia, serif;
+        }
+
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        html { font-size: 16px; scroll-behavior: smooth; }
+        body {
+            font-family: var(--font-sans);
+            color: var(--color-text);
+            background: var(--color-bg);
+            line-height: 1.8;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            background: var(--color-surface);
+            border-bottom: 1px solid var(--color-border-light);
+            padding: 1rem 1.5rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .header-inner {
+            max-width: 1000px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            text-decoration: none;
+            color: var(--color-text);
+        }
+        .logo img { height: 32px; }
+        .logo-text { font-size: 0.9rem; color: var(--color-text-light); }
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--color-text-light);
+            text-decoration: none;
+            font-size: 0.875rem;
+            padding: 0.5rem 1rem;
+            border-radius: 100px;
+            transition: all 0.2s ease;
+        }
+        .back-btn:hover { background: var(--color-bg-alt); color: var(--color-text); }
+
+        .main { flex: 1; padding: 3rem 1.5rem; }
+        .container { max-width: 1000px; margin: 0 auto; }
+
+        /* Hero */
+        .hero {
+            text-align: center;
+            margin-bottom: 3rem;
+            position: relative;
+            padding: 2rem 0;
+        }
+        .hero-images {
+            position: absolute;
+            inset: 0;
+            z-index: -1;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 5%;
+            opacity: 0.08;
+        }
+        .hero-images img {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: var(--color-accent-warm);
+            border-radius: 100px;
+            font-size: 0.8rem;
+            color: #B8927A;
+            margin-bottom: 1.5rem;
+        }
+        .hero-title {
+            font-family: var(--font-serif);
+            font-size: clamp(1.75rem, 4vw, 2.5rem);
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+        .hero-subtitle {
+            font-size: 1.1rem;
+            color: var(--color-text-light);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Stats */
+        .stats-row {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            margin: 2rem 0 3rem;
+            flex-wrap: wrap;
+        }
+        .stat-item {
+            text-align: center;
+        }
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 300;
+            color: var(--color-primary);
+            line-height: 1.2;
+        }
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--color-text-muted);
+        }
+
+        /* Category Section */
+        .category-section {
+            margin-bottom: 3rem;
+        }
+        .category-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--cat-color, var(--color-primary));
+        }
+        .category-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            background: var(--cat-bg, var(--color-primary-light));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .category-icon .material-symbols-outlined {
+            font-size: 26px;
+            color: var(--cat-color, var(--color-primary));
+        }
+        .category-title {
+            font-family: var(--font-serif);
+            font-size: 1.35rem;
+            font-weight: 500;
+        }
+        .category-count {
+            margin-left: auto;
+            padding: 0.25rem 0.75rem;
+            background: var(--cat-bg, var(--color-primary-light));
+            color: var(--cat-color, var(--color-primary));
+            border-radius: 100px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        /* Tools Grid */
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 1rem;
+        }
+        .tool-card {
+            background: var(--color-surface);
+            border: 1px solid var(--color-border-light);
+            border-radius: 12px;
+            padding: 1.25rem;
+            transition: all 0.2s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .tool-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--cat-color, var(--color-primary));
+            opacity: 0;
+            transition: opacity 0.2s ease;
+        }
+        .tool-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+            border-color: var(--cat-color, var(--color-primary));
+        }
+        .tool-card:hover::before {
+            opacity: 1;
+        }
+        .tool-name {
+            font-size: 0.95rem;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .tool-name .material-symbols-outlined {
+            font-size: 18px;
+            color: var(--cat-color, var(--color-primary));
+        }
+        .tool-desc {
+            font-size: 0.8rem;
+            color: var(--color-text-muted);
+            line-height: 1.5;
+        }
+        .tool-chapter {
+            margin-top: 0.75rem;
+            font-size: 0.7rem;
+            color: var(--color-text-muted);
+            background: var(--color-bg-alt);
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            display: inline-block;
+        }
+
+        /* Category Colors */
+        .category-section.self-knowledge { --cat-color: #9B8AA6; --cat-bg: #F3EFF6; }
+        .category-section.decision { --cat-color: #7BA3A8; --cat-bg: #EBF3F4; }
+        .category-section.communication { --cat-color: #B89B7A; --cat-bg: #F5F0EB; }
+        .category-section.monitoring { --cat-color: #5A9A8A; --cat-bg: #E8F4F0; }
+
+        /* Featured Image */
+        .featured-image {
+            margin: 3rem 0;
+            border-radius: 20px;
+            overflow: hidden;
+            position: relative;
+        }
+        .featured-image img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+        .featured-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(155,138,166,0.85) 0%, rgba(232,180,184,0.85) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            color: white;
+            text-align: center;
+            padding: 2rem;
+        }
+        .featured-overlay h3 {
+            font-family: var(--font-serif);
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+        .featured-overlay p {
+            font-size: 0.95rem;
+            opacity: 0.9;
+            max-width: 400px;
+        }
+
+        /* CTA */
+        .cta-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+        .cta-card {
+            background: var(--color-surface);
+            border: 1px solid var(--color-border-light);
+            border-radius: 16px;
+            padding: 1.5rem;
+            text-decoration: none;
+            color: var(--color-text);
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .cta-card:hover {
+            border-color: var(--color-primary);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+        }
+        .cta-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--color-primary-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .cta-icon .material-symbols-outlined {
+            font-size: 24px;
+            color: var(--color-primary);
+        }
+        .cta-content h4 {
+            font-size: 1rem;
+            font-weight: 500;
+            margin-bottom: 0.25rem;
+        }
+        .cta-content p {
+            font-size: 0.8rem;
+            color: var(--color-text-muted);
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--color-surface);
+            border-top: 1px solid var(--color-border-light);
+            padding: 2rem 1.5rem;
+            text-align: center;
+        }
+        .footer-logo { height: 36px; opacity: 0.7; margin-bottom: 1rem; }
+        .footer-text { font-size: 0.8rem; color: var(--color-text-muted); margin-bottom: 0.5rem; }
+        .footer-link { color: var(--color-text-light); text-decoration: none; }
+
+        @media (max-width: 768px) {
+            .stats-row { gap: 1.5rem; }
+            .stat-number { font-size: 2rem; }
+            .tools-grid { grid-template-columns: 1fr; }
+            .cta-grid { grid-template-columns: 1fr; }
+            .hero-images { display: none; }
+            .category-header { flex-wrap: wrap; }
+            .category-count { margin-left: 0; margin-top: 0.5rem; }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-inner">
+            <a href="index.html" class="logo">
+                <img src="https://docs.bccsw.cn/logo.png" alt="Logo">
+                <span class="logo-text">美丽的心灵地图</span>
+            </a>
+            <a href="index.html#features" class="back-btn">
+                <span class="material-symbols-outlined">arrow_back</span>
+                返回首页
+            </a>
+        </div>
+    </header>
+
+    <main class="main">
+        <div class="container">
+            <!-- Hero -->
+            <section class="hero">
+                <div class="hero-images" id="heroImages"></div>
+                <div class="hero-badge">
+                    <span class="material-symbols-outlined">inventory_2</span>
+                    本书特色 · 实用工具
+                </div>
+                <h1 class="hero-title">60+实用工具包</h1>
+                <p class="hero-subtitle">科学设计的评估表、清单和指南，可直接应用于自我认知和决策过程</p>
+            </section>
+
+            <!-- Stats -->
+            <div class="stats-row">
+                <div class="stat-item">
+                    <div class="stat-number">60+</div>
+                    <div class="stat-label">实用工具</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">4</div>
+                    <div class="stat-label">功能类别</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">8</div>
+                    <div class="stat-label">覆盖章节</div>
+                </div>
+            </div>
+
+            <!-- Category 1: Self Knowledge -->
+            <section class="category-section self-knowledge">
+                <div class="category-header">
+                    <div class="category-icon">
+                        <span class="material-symbols-outlined">psychology</span>
+                    </div>
+                    <h2 class="category-title">自我认知类</h2>
+                    <span class="category-count">15+ 工具</span>
+                </div>
+                <div class="tools-grid">
+                    <div class="tool-card">
+                        <div class="tool-name">
+                            <span class="material-symbols-outlined">sort</span>
+                            价值观排序表
+                        </div>
+                        <div class="tool-desc">识别你最核心的人生价值观优先级</div>
+                        <span class="tool-chapter">第1章</span>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">
+                            <span class="material-symbols-outlined">star</span>
+                            优势识别清单
+                        </div>
+                        <div class="tool-desc">发现你独特的个人优势和魅力点</div>
+                        <span class="tool-chapter">第5章</span>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">
+                            <span class="material-symbols-outlined">edit_note</span>
+                            动机日记模板
+                        </div>
+                        <div class="tool-desc">记录和分析变美动机的结构化工具</div>
+                        <span class="tool-chapter">第1章</span>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">
+                            <span class="material-symbols-outlined">tune</span>
+                            杠杆类型测试
+                        </div>
+                        <div class="tool-desc">识别你是补偿型还是增益型</div>
+                        <span class="tool-chapter">第1章</span>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">
+                            <span class="material-symbols-outlined">hub</span>
+                            三个自我评估
+                        </div>
+                        <div class="tool-desc">评估镜像/地图/定锚自我的平衡度</div>
+                        <span class="tool-chapter">第5章</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Category 2: Decision Support -->
+            <section class="category-section decision">
+                <div class="category-header">
+                    <div class="category-icon">
+                        <span class="material-symbols-outlined">balance</span>
+                    </div>
+                    <h2 class="category-title">决策支持类</h2>
+                    <span class="category-count">20+ 工具</span>
+                </div>
+                <div class="tools-grid">
+                    <div class="tool-card">
+                        <div class="tool-name">
+                            <span class="material-symbols-outlined">analytics</span>
+                            风险评估矩阵
+                        </div>
+                        <div class="tool-desc">系统评估项目的风险与收益</div>
+                        <span class="tool-chapter">第2章</span>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">
+                            <span class="material-symbols-outlined">calculate</span>
+                            ROI计算器
+                        </div>
+                        <div class="tool-desc">计算医美项目的投资回报</div>
+                        <span class="tool-chapter">第2章</span>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">
+                            <span class="material-symbols-outlined">compare</span>
+                            项目对比表
+                        </div>
+                        <div class="tool-desc">多维度对比不同项目方案</div>
+                        <span class="tool-chapter">第2章</span>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">
+                            <span class="material-symbols-outlined">verified</span>
+                            资质核查清单
+                        </div>
+                        <div class="tool-desc">验证机构和医生的合规资质</div>
+                        <span class="tool-chapter">第2章</span>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">
+                            <span class="material-symbols-outlined">checklist</span>
+                            决策检查表
+                        </div>
+                        <div class="tool-desc">最终决策前的完整检查清单</div>
+                        <span class="tool-chapter">第2章</span>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">
+                            <span class="material-symbols-outlined">target</span>
+                            期望校准表
+                        </div>
+                        <div class="tool-desc">设定合理可达的效果期望</div>
+                        <span class="tool-chapter">第2章</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Featured Image -->
+            <section class="featured-image">
+                <img src="" alt="" id="featuredImg">
+                <div class="featured-overlay">
+                    <h3>即学即用的实战工具</h3>
+                    <p>每个工具都附有详细的使用说明和真实案例示范</p>
+                </div>
+            </section>
+
+            <!-- Category 3: Communication -->
+            <section class="category-section communication">
+                <div class="category-header">
+                    <div class="category-icon">
+                        <span class="material-symbols-outlined">forum</span>
+                    </div>
+                    <h2 class="category-title">沟通交流类</h2>
+                    <span class="category-count">15+ 工具</span>
+                </div>
+                <div class="tools-grid">
+                    <div class="tool-card">
+                        <div class="tool-name">
+                            <span class="material-symbols-outlined">chat</span>
+                            咨询话术指南
+                        </div>
+                        <div class="tool-desc">与医生/顾问高效沟通的话术</div>
+                        <span class="tool-chapter">第3章</span>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">
+                            <span class="material-symbols-outlined">visibility_off</span>
+                            营销识别清单
+                        </div>
+                        <div class="tool-desc">识别常见营销话术和套路</div>
+                        <span class="tool-chapter">第3章</span>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">
+                            <span class="material-symbols-outlined">help</span>
+                            关键问题清单
+                        </div>
+                        <div class="tool-desc">面诊时必须问清楚的问题</div>
+                        <span class="tool-chapter">第2章</span>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">
+                            <span class="material-symbols-outlined">family_restroom</span>
+                            家人沟通指南
+                        </div>
+                        <div class="tool-desc">如何与家人讨论医美决定</div>
+                        <span class="tool-chapter">第6章</span>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">
+                            <span class="material-symbols-outlined">handshake</span>
+                            冲突解决模板
+                        </div>
+                        <div class="tool-desc">处理与机构纠纷的沟通框架</div>
+                        <span class="tool-chapter">第2章</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Category 4: Monitoring -->
+            <section class="category-section monitoring">
+                <div class="category-header">
+                    <div class="category-icon">
+                        <span class="material-symbols-outlined">monitoring</span>
+                    </div>
+                    <h2 class="category-title">监测管理类</h2>
+                    <span class="category-count">10+ 工具</span>
+                </div>
+                <div class="tools-grid">
+                    <div class="tool-card">
+                        <div class="tool-name">
+                            <span class="material-symbols-outlined">sentiment_satisfied</span>
+                            心理健康量表
+                        </div>
+                        <div class="tool-desc">监测变美过程中的心理状态</div>
+                        <span class="tool-chapter">第6章</span>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">
+                            <span class="material-symbols-outlined">insert_chart</span>
+                            效果追踪表
+                        </div>
+                        <div class="tool-desc">记录术后恢复和效果变化</div>
+                        <span class="tool-chapter">第8章</span>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">
+                            <span class="material-symbols-outlined">grade</span>
+                            满意度评估
+                        </div>
+                        <div class="tool-desc">多维度评估最终满意程度</div>
+                        <span class="tool-chapter">第8章</span>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">
+                            <span class="material-symbols-outlined">calendar_month</span>
+                            美丽规划日历
+                        </div>
+                        <div class="tool-desc">长期美丽管理的时间规划</div>
+                        <span class="tool-chapter">第8章</span>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-name">
+                            <span class="material-symbols-outlined">history_edu</span>
+                            经验复盘模板
+                        </div>
+                        <div class="tool-desc">总结经验教训的结构化工具</div>
+                        <span class="tool-chapter">第8章</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- CTA Grid -->
+            <section class="cta-grid">
+                <a href="reader.html?file=02-motivation.md" class="cta-card">
+                    <div class="cta-icon">
+                        <span class="material-symbols-outlined">psychology</span>
+                    </div>
+                    <div class="cta-content">
+                        <h4>开始自我探索</h4>
+                        <p>阅读第一章，使用动机分析工具</p>
+                    </div>
+                </a>
+                <a href="reader.html?file=03-decision-making.md" class="cta-card">
+                    <div class="cta-icon">
+                        <span class="material-symbols-outlined">route</span>
+                    </div>
+                    <div class="cta-content">
+                        <h4>掌握决策流程</h4>
+                        <p>阅读第二章，学习8步决策法</p>
+                    </div>
+                </a>
+            </section>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <img src="https://docs.bccsw.cn/logo.png" alt="Logo" class="footer-logo">
+            <p class="footer-text">《美丽的心灵地图》— 医美消费心理学指南</p>
+            <p class="footer-text">
+                © 重庆联合丽格科技有限公司 ·
+                <a href="https://beian.miit.gov.cn/" target="_blank" class="footer-link">渝ICP备2024023473号</a>
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        const images = {
+            portrait: Array.from({length: 18}, (_, i) => `images/portrait-${String(i+1).padStart(2, '0')}.jpg`),
+            aiart: Array.from({length: 30}, (_, i) => `images/aiart-${String(i+1).padStart(2, '0')}.jpg`)
+        };
+        const shuffle = arr => [...arr].sort(() => Math.random() - 0.5);
+
+        // Hero images
+        const heroImages = document.getElementById('heroImages');
+        const heroImgArr = shuffle(images.portrait).slice(0, 3);
+        heroImages.innerHTML = heroImgArr.map(src => `<img src="${src}" alt="">`).join('');
+
+        // Featured image
+        document.getElementById('featuredImg').src = shuffle(images.aiart)[0];
+    </script>
+</body>
+</html>

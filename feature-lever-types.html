@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>美丽杠杆类型学 | 美丽的心灵地图</title>
+    <meta name="description" content="基于动机心理学的分类系统：补偿型杠杆与增益型杠杆，理解你的变美动机">
+    <link rel="icon" type="image/png" href="https://docs.bccsw.cn/favicon.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500&family=Noto+Serif+SC:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap">
+    <style>
+        :root {
+            --color-bg: #FAFAF9;
+            --color-bg-alt: #F5F5F4;
+            --color-surface: #FFFFFF;
+            --color-text: #3D3D3D;
+            --color-text-light: #737373;
+            --color-text-muted: #A3A3A3;
+            --color-border: #E5E5E5;
+            --color-border-light: #F0F0F0;
+            --color-primary: #9B8AA6;
+            --color-primary-light: #C9BED4;
+            --color-accent: #E8B4B8;
+            --color-accent-warm: #F5E6D3;
+            --font-sans: 'Noto Sans SC', -apple-system, sans-serif;
+            --font-serif: 'Noto Serif SC', Georgia, serif;
+        }
+
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        html { font-size: 16px; scroll-behavior: smooth; }
+        body {
+            font-family: var(--font-sans);
+            color: var(--color-text);
+            background: var(--color-bg);
+            line-height: 1.8;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            background: var(--color-surface);
+            border-bottom: 1px solid var(--color-border-light);
+            padding: 1rem 1.5rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .header-inner {
+            max-width: 1000px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            text-decoration: none;
+            color: var(--color-text);
+        }
+        .logo img { height: 32px; }
+        .logo-text {
+            font-size: 0.9rem;
+            color: var(--color-text-light);
+        }
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--color-text-light);
+            text-decoration: none;
+            font-size: 0.875rem;
+            padding: 0.5rem 1rem;
+            border-radius: 100px;
+            transition: all 0.2s ease;
+        }
+        .back-btn:hover {
+            background: var(--color-bg-alt);
+            color: var(--color-text);
+        }
+
+        .main { flex: 1; padding: 3rem 1.5rem; }
+        .container { max-width: 900px; margin: 0 auto; }
+
+        /* Hero */
+        .hero {
+            text-align: center;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+        .hero-decor {
+            position: absolute;
+            border-radius: 50%;
+            object-fit: cover;
+            opacity: 0.12;
+            z-index: -1;
+        }
+        .hero-decor-1 {
+            width: 160px;
+            height: 160px;
+            top: -40px;
+            left: 5%;
+            animation: float 7s ease-in-out infinite;
+        }
+        .hero-decor-2 {
+            width: 120px;
+            height: 120px;
+            bottom: 0;
+            right: 8%;
+            animation: float 6s ease-in-out infinite 1s;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-12px) rotate(3deg); }
+        }
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: var(--color-accent-warm);
+            border-radius: 100px;
+            font-size: 0.8rem;
+            color: #B8927A;
+            margin-bottom: 1.5rem;
+        }
+        .hero-title {
+            font-family: var(--font-serif);
+            font-size: clamp(1.75rem, 4vw, 2.5rem);
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+        .hero-subtitle {
+            font-size: 1.1rem;
+            color: var(--color-text-light);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Lever Types */
+        .lever-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .lever-card {
+            background: var(--color-surface);
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px solid var(--color-border-light);
+            transition: all 0.3s ease;
+        }
+        .lever-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 16px 48px rgba(0,0,0,0.08);
+        }
+
+        .lever-header {
+            padding: 2rem;
+            background: var(--lever-bg);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .lever-header img {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 200%;
+            height: 200%;
+            object-fit: cover;
+            opacity: 0.15;
+        }
+        .lever-header-content {
+            position: relative;
+            z-index: 1;
+        }
+        .lever-icon {
+            width: 64px;
+            height: 64px;
+            margin: 0 auto 1rem;
+            background: var(--color-surface);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+        }
+        .lever-icon .material-symbols-outlined {
+            font-size: 32px;
+            color: var(--lever-color);
+        }
+        .lever-title {
+            font-family: var(--font-serif);
+            font-size: 1.5rem;
+            font-weight: 500;
+            color: var(--color-surface);
+            margin-bottom: 0.25rem;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+        .lever-subtitle {
+            font-size: 0.85rem;
+            color: rgba(255,255,255,0.8);
+        }
+
+        .lever-body {
+            padding: 2rem;
+        }
+        .lever-desc {
+            font-size: 0.95rem;
+            color: var(--color-text-light);
+            margin-bottom: 1.5rem;
+            line-height: 1.8;
+        }
+        .lever-list {
+            list-style: none;
+        }
+        .lever-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--color-border-light);
+            font-size: 0.9rem;
+            color: var(--color-text-light);
+        }
+        .lever-list li:last-child {
+            border-bottom: none;
+        }
+        .lever-list .material-symbols-outlined {
+            font-size: 18px;
+            color: var(--lever-color);
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .lever-card.compensate {
+            --lever-bg: linear-gradient(135deg, #C9A5A8 0%, #9B8AA6 100%);
+            --lever-color: #9B8AA6;
+        }
+        .lever-card.enhance {
+            --lever-bg: linear-gradient(135deg, #7BA3A8 0%, #5A9A8A 100%);
+            --lever-color: #5A9A8A;
+        }
+
+        /* Comparison Table */
+        .comparison-section {
+            background: var(--color-surface);
+            border-radius: 20px;
+            padding: 2.5rem;
+            margin-bottom: 3rem;
+            border: 1px solid var(--color-border-light);
+        }
+        .comparison-title {
+            font-family: var(--font-serif);
+            font-size: 1.5rem;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .comparison-table th,
+        .comparison-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--color-border-light);
+            font-size: 0.9rem;
+        }
+        .comparison-table th {
+            background: var(--color-bg-alt);
+            font-weight: 500;
+            color: var(--color-text);
+        }
+        .comparison-table th:first-child {
+            border-radius: 8px 0 0 0;
+        }
+        .comparison-table th:last-child {
+            border-radius: 0 8px 0 0;
+        }
+        .comparison-table td {
+            color: var(--color-text-light);
+        }
+        .comparison-table tr:hover td {
+            background: var(--color-bg-alt);
+        }
+        .type-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 100px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        .type-badge.compensate {
+            background: #F3EEF0;
+            color: #9B8AA6;
+        }
+        .type-badge.enhance {
+            background: #E8F4F0;
+            color: #5A9A8A;
+        }
+
+        /* Strategy Section */
+        .strategy-section {
+            display: grid;
+            grid-template-columns: 200px 1fr;
+            gap: 2rem;
+            align-items: start;
+            margin-bottom: 2rem;
+        }
+        .strategy-image {
+            width: 100%;
+            aspect-ratio: 1;
+            border-radius: 16px;
+            object-fit: cover;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+        }
+        .strategy-content h3 {
+            font-family: var(--font-serif);
+            font-size: 1.25rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .strategy-content h3 .material-symbols-outlined {
+            color: var(--color-primary);
+        }
+        .strategy-content p {
+            font-size: 0.95rem;
+            color: var(--color-text-light);
+            margin-bottom: 1rem;
+        }
+        .strategy-tips {
+            background: var(--color-bg-alt);
+            border-radius: 12px;
+            padding: 1rem 1.5rem;
+        }
+        .strategy-tips h4 {
+            font-size: 0.85rem;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            color: var(--color-primary);
+        }
+        .strategy-tips ul {
+            list-style: none;
+            font-size: 0.85rem;
+            color: var(--color-text-light);
+        }
+        .strategy-tips li {
+            padding: 0.25rem 0;
+        }
+        .strategy-tips li::before {
+            content: '→ ';
+            color: var(--color-primary);
+        }
+
+        /* CTA */
+        .cta-box {
+            background: linear-gradient(135deg, var(--color-primary-light) 0%, var(--color-accent) 100%);
+            border-radius: 16px;
+            padding: 2.5rem;
+            text-align: center;
+        }
+        .cta-box h3 {
+            font-family: var(--font-serif);
+            font-size: 1.25rem;
+            margin-bottom: 1rem;
+            color: var(--color-text);
+        }
+        .cta-box p {
+            font-size: 0.95rem;
+            color: var(--color-text-light);
+            max-width: 500px;
+            margin: 0 auto 1.5rem;
+        }
+        .cta-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            background: var(--color-surface);
+            color: var(--color-text);
+            border-radius: 100px;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .cta-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--color-surface);
+            border-top: 1px solid var(--color-border-light);
+            padding: 2rem 1.5rem;
+            text-align: center;
+        }
+        .footer-logo { height: 36px; opacity: 0.7; margin-bottom: 1rem; }
+        .footer-text { font-size: 0.8rem; color: var(--color-text-muted); margin-bottom: 0.5rem; }
+        .footer-link { color: var(--color-text-light); text-decoration: none; }
+
+        @media (max-width: 768px) {
+            .lever-section { grid-template-columns: 1fr; }
+            .strategy-section { grid-template-columns: 1fr; }
+            .strategy-image { max-width: 200px; margin: 0 auto; }
+            .comparison-table { font-size: 0.8rem; }
+            .comparison-table th, .comparison-table td { padding: 0.75rem 0.5rem; }
+            .hero-decor { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-inner">
+            <a href="index.html" class="logo">
+                <img src="https://docs.bccsw.cn/logo.png" alt="Logo">
+                <span class="logo-text">美丽的心灵地图</span>
+            </a>
+            <a href="index.html#features" class="back-btn">
+                <span class="material-symbols-outlined">arrow_back</span>
+                返回首页
+            </a>
+        </div>
+    </header>
+
+    <main class="main">
+        <div class="container">
+            <!-- Hero -->
+            <section class="hero">
+                <img src="" alt="" class="hero-decor hero-decor-1" id="decor1">
+                <img src="" alt="" class="hero-decor hero-decor-2" id="decor2">
+                <div class="hero-badge">
+                    <span class="material-symbols-outlined">tune</span>
+                    本书特色 · 分类系统
+                </div>
+                <h1 class="hero-title">美丽杠杆类型学</h1>
+                <p class="hero-subtitle">基于动机心理学的变美类型分析，帮助你识别自己的变美动机模式，制定个性化的策略</p>
+            </section>
+
+            <!-- Two Lever Types -->
+            <section class="lever-section">
+                <div class="lever-card compensate">
+                    <div class="lever-header">
+                        <img src="" alt="" id="compImg">
+                        <div class="lever-header-content">
+                            <div class="lever-icon">
+                                <span class="material-symbols-outlined">healing</span>
+                            </div>
+                            <h2 class="lever-title">补偿型杠杆</h2>
+                            <p class="lever-subtitle">Compensatory Lever</p>
+                        </div>
+                    </div>
+                    <div class="lever-body">
+                        <p class="lever-desc">驱动力来源于对某种感知不足的弥补。变美是为了填补内心的缺失感，修复自我形象中的"创伤点"。</p>
+                        <ul class="lever-list">
+                            <li>
+                                <span class="material-symbols-outlined">psychology</span>
+                                <span>常源于早期经历、创伤记忆或长期的负面评价</span>
+                            </li>
+                            <li>
+                                <span class="material-symbols-outlined">warning</span>
+                                <span>容易陷入"修复一个又出现一个"的循环</span>
+                            </li>
+                            <li>
+                                <span class="material-symbols-outlined">lightbulb</span>
+                                <span>需要先处理内在的心理创伤，再考虑外在改变</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="lever-card enhance">
+                    <div class="lever-header">
+                        <img src="" alt="" id="enhImg">
+                        <div class="lever-header-content">
+                            <div class="lever-icon">
+                                <span class="material-symbols-outlined">trending_up</span>
+                            </div>
+                            <h2 class="lever-title">增益型杠杆</h2>
+                            <p class="lever-subtitle">Enhancement Lever</p>
+                        </div>
+                    </div>
+                    <div class="lever-body">
+                        <p class="lever-desc">驱动力来源于对现有优势的进一步提升。变美是锦上添花，在良好基础上追求更好版本的自己。</p>
+                        <ul class="lever-list">
+                            <li>
+                                <span class="material-symbols-outlined">sentiment_satisfied</span>
+                                <span>建立在稳定的自我认同和自信基础上</span>
+                            </li>
+                            <li>
+                                <span class="material-symbols-outlined">check_circle</span>
+                                <span>目标清晰、期望合理、更容易获得满足感</span>
+                            </li>
+                            <li>
+                                <span class="material-symbols-outlined">auto_awesome</span>
+                                <span>将变美视为自我投资而非自我修复</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Comparison -->
+            <section class="comparison-section">
+                <h2 class="comparison-title">两种类型的关键对比</h2>
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>维度</th>
+                            <th><span class="type-badge compensate">补偿型</span></th>
+                            <th><span class="type-badge enhance">增益型</span></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>核心驱动</td>
+                            <td>逃离痛苦、弥补缺失</td>
+                            <td>追求更好、优化提升</td>
+                        </tr>
+                        <tr>
+                            <td>情绪基调</td>
+                            <td>焦虑、不安、自我否定</td>
+                            <td>期待、兴奋、自我肯定</td>
+                        </tr>
+                        <tr>
+                            <td>决策模式</td>
+                            <td>冲动、紧迫、容易被营销影响</td>
+                            <td>理性、从容、有长期规划</td>
+                        </tr>
+                        <tr>
+                            <td>期望设定</td>
+                            <td>过高或模糊，寻求"彻底改变"</td>
+                            <td>具体可衡量，追求"适度改善"</td>
+                        </tr>
+                        <tr>
+                            <td>结果满意度</td>
+                            <td>即使成功也难以持续满足</td>
+                            <td>更容易获得持久满足感</td>
+                        </tr>
+                        <tr>
+                            <td>建议策略</td>
+                            <td>先心理建设，后外在改变</td>
+                            <td>制定清晰计划，循序渐进</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- Strategy -->
+            <section class="strategy-section">
+                <img src="" alt="" class="strategy-image" id="strategyImg">
+                <div class="strategy-content">
+                    <h3>
+                        <span class="material-symbols-outlined">tips_and_updates</span>
+                        识别你的杠杆类型
+                    </h3>
+                    <p>大多数人并非纯粹的某一类型，而是两种类型的混合。关键是识别在特定决策中，哪种动机占主导地位，并采取相应的策略。</p>
+                    <div class="strategy-tips">
+                        <h4>自我检测问题</h4>
+                        <ul>
+                            <li>我想改变的原因是"讨厌现在"还是"想要更好"？</li>
+                            <li>如果不做这个项目，我的日常情绪会受到多大影响？</li>
+                            <li>这个决定是在平静状态下做出的，还是情绪激动时？</li>
+                            <li>我的期望是具体可描述的，还是"就想变好看"？</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- CTA -->
+            <section class="cta-box">
+                <h3>深入了解你的变美动机</h3>
+                <p>第一章详细解析了变美动机的心理学原理，帮助你建立清晰的自我认知</p>
+                <a href="reader.html?file=02-motivation.md" class="cta-btn">
+                    <span class="material-symbols-outlined">menu_book</span>
+                    阅读第一章
+                </a>
+            </section>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <img src="https://docs.bccsw.cn/logo.png" alt="Logo" class="footer-logo">
+            <p class="footer-text">《美丽的心灵地图》— 医美消费心理学指南</p>
+            <p class="footer-text">
+                © 重庆联合丽格科技有限公司 ·
+                <a href="https://beian.miit.gov.cn/" target="_blank" class="footer-link">渝ICP备2024023473号</a>
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        const images = {
+            portrait: Array.from({length: 18}, (_, i) => `images/portrait-${String(i+1).padStart(2, '0')}.jpg`),
+            aiart: Array.from({length: 30}, (_, i) => `images/aiart-${String(i+1).padStart(2, '0')}.jpg`)
+        };
+        const getRandom = arr => arr[Math.floor(Math.random() * arr.length)];
+
+        document.getElementById('decor1').src = getRandom(images.aiart);
+        document.getElementById('decor2').src = getRandom(images.portrait);
+        document.getElementById('compImg').src = getRandom(images.aiart);
+        document.getElementById('enhImg').src = getRandom(images.aiart);
+        document.getElementById('strategyImg').src = getRandom(images.portrait);
+    </script>
+</body>
+</html>

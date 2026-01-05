@@ -905,6 +905,176 @@
             color: var(--color-text);
         }
 
+        /* ==================== About Modal ==================== */
+        .about-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 3000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(4px);
+        }
+
+        .about-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .about-modal {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.95);
+            background: var(--color-surface);
+            border-radius: 20px;
+            width: 90%;
+            max-width: 640px;
+            max-height: 85vh;
+            overflow-y: auto;
+            z-index: 3001;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            box-shadow: 0 25px 80px rgba(0, 0, 0, 0.2);
+        }
+
+        .about-modal.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        .about-header {
+            position: sticky;
+            top: 0;
+            background: var(--color-surface);
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--color-border-light);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            z-index: 1;
+        }
+
+        .about-header-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .about-header-left img {
+            height: 36px;
+        }
+
+        .about-header h2 {
+            font-size: 1.25rem;
+            font-weight: var(--font-weight-medium);
+        }
+
+        .about-close {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0.5rem;
+            color: var(--color-text-muted);
+            transition: color 0.2s ease;
+        }
+
+        .about-close:hover {
+            color: var(--color-text);
+        }
+
+        .about-content {
+            padding: 1.5rem;
+        }
+
+        .about-section {
+            margin-bottom: 2rem;
+        }
+
+        .about-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .about-section-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 2px solid var(--about-color, var(--color-primary));
+        }
+
+        .about-section-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: var(--about-bg, var(--color-primary-light));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .about-section-icon .material-symbols-outlined {
+            font-size: 22px;
+            color: var(--about-color, var(--color-primary));
+        }
+
+        .about-section h3 {
+            font-size: 1rem;
+            font-weight: var(--font-weight-medium);
+        }
+
+        .about-section p {
+            font-size: 0.9rem;
+            color: var(--color-text-light);
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+
+        .about-section p:last-child {
+            margin-bottom: 0;
+        }
+
+        .about-section.importance { --about-color: #9B8AA6; --about-bg: #F3EFF6; }
+        .about-section.ai { --about-color: #5A9A8A; --about-bg: #E8F4F0; }
+        .about-section.legal { --about-color: #B89B7A; --about-bg: #F5F0EB; }
+
+        .disclaimer-item {
+            background: var(--color-bg-alt);
+            border-radius: 10px;
+            padding: 1rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .disclaimer-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .disclaimer-item h4 {
+            font-size: 0.85rem;
+            font-weight: var(--font-weight-medium);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .disclaimer-item h4 .material-symbols-outlined {
+            font-size: 16px;
+            color: var(--color-primary);
+        }
+
+        .disclaimer-item p {
+            font-size: 0.8rem;
+            margin-bottom: 0;
+        }
+
         /* ==================== Loading State ==================== */
         .loading {
             display: flex;
@@ -1033,7 +1203,7 @@
             <nav class="nav-links">
                 <a href="#chapters" class="nav-link active">章节目录</a>
                 <a href="#features" class="nav-link">本书特色</a>
-                <a href="#about" class="nav-link">关于</a>
+                <a href="javascript:void(0)" class="nav-link" onclick="openAbout()">关于</a>
                 <a href="#contact" class="nav-link">联系</a>
             </nav>
             <button class="menu-btn" onclick="toggleMobileMenu()" aria-label="菜单">
@@ -1046,7 +1216,7 @@
     <nav class="mobile-menu" id="mobileMenu">
         <a href="#chapters" class="nav-link" onclick="closeMobileMenu()">章节目录</a>
         <a href="#features" class="nav-link" onclick="closeMobileMenu()">本书特色</a>
-        <a href="#about" class="nav-link" onclick="closeMobileMenu()">关于</a>
+        <a href="javascript:void(0)" class="nav-link" onclick="closeMobileMenu(); openAbout()">关于</a>
         <a href="#contact" class="nav-link" onclick="closeMobileMenu()">联系</a>
     </nav>
 
@@ -1217,7 +1387,7 @@
     <footer class="footer" id="contact">
         <div class="container">
             <div class="footer-content">
-                <div class="footer-brand" id="about">
+                <div class="footer-brand">
                     <img src="https://docs.bccsw.cn/logo.png" alt="Logo">
                     <p>专注于医美消费心理学研究，帮助消费者建立健康的美丽观念，做出理性的变美选择</p>
                 </div>
@@ -1239,7 +1409,8 @@
             <div class="footer-bottom">
                 <p>
                     重庆联合丽格科技有限公司 |
-                    <a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener noreferrer">渝ICP备2024023473号</a>
+                    <a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener noreferrer">渝ICP备2024023473号</a> |
+                    <a href="javascript:void(0)" onclick="openAbout()">关于本站</a>
                 </p>
             </div>
         </div>
@@ -1264,6 +1435,73 @@
                     <span>加载中...</span>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <!-- About Modal -->
+    <div class="about-overlay" id="aboutOverlay" onclick="closeAbout()"></div>
+    <div class="about-modal" id="aboutModal">
+        <div class="about-header">
+            <div class="about-header-left">
+                <img src="https://docs.bccsw.cn/logo.png" alt="Logo">
+                <h2>关于本站</h2>
+            </div>
+            <button class="about-close" onclick="closeAbout()">
+                <span class="material-symbols-outlined">close</span>
+            </button>
+        </div>
+        <div class="about-content">
+            <!-- Section 1: 自主内容床 -->
+            <section class="about-section importance">
+                <div class="about-section-header">
+                    <div class="about-section-icon">
+                        <span class="material-symbols-outlined">hub</span>
+                    </div>
+                    <h3>自主内容床的重要性</h3>
+                </div>
+                <p>在超级大型互联网平台统治的时代，医疗机构和医生的内容完全依赖第三方平台，面临着账号封禁、流量限制、规则突变等诸多不确定风险。拥有自己的内容床（独立内容网站），意味着拥有内容的完全控制权，不受任何平台政策变化的影响，是医生IP和品牌IP建设的坚实基础。</p>
+            </section>
+
+            <!-- Section 2: AI时代 -->
+            <section class="about-section ai">
+                <div class="about-section-header">
+                    <div class="about-section-icon">
+                        <span class="material-symbols-outlined">smart_toy</span>
+                    </div>
+                    <h3>AI时代的内容基地</h3>
+                </div>
+                <p>在AI时代，拥有全能AI支持的自有内容基地尤为重要。AI可以帮助生成、优化、管理内容，与电子病历（脱敏数据）、HIS系统等打通，构建智能化的内容IP矩阵。加盟联合丽格可以获得AI时代自主内容建设的全方位支持，这是医生IP和品牌IP建设的重要组成部分。</p>
+            </section>
+
+            <!-- Section 3: 免责声明 -->
+            <section class="about-section legal">
+                <div class="about-section-header">
+                    <div class="about-section-icon">
+                        <span class="material-symbols-outlined">gavel</span>
+                    </div>
+                    <h3>免责声明</h3>
+                </div>
+
+                <div class="disclaimer-item">
+                    <h4><span class="material-symbols-outlined">smart_toy</span>AI内容声明</h4>
+                    <p>本站部分内容由人工智能辅助生成。虽然我们努力确保信息的准确性和可靠性，但AI生成的内容可能存在错误、遗漏或不完整之处。所有AI生成内容仅供参考，不构成专业医疗建议。</p>
+                </div>
+
+                <div class="disclaimer-item">
+                    <h4><span class="material-symbols-outlined">medical_information</span>医疗内容免责声明</h4>
+                    <p>本站提供的所有医学美容相关信息仅供科普教育目的，旨在帮助公众了解医美知识。这些内容不能替代专业医疗诊断、建议或治疗。每个人的身体状况不同，医美方案需要根据个人情况由专业医生评估制定。</p>
+                </div>
+
+                <div class="disclaimer-item">
+                    <h4><span class="material-symbols-outlined">healing</span>诊疗提示</h4>
+                    <p>如有医美需求，请务必前往具有合法资质的正规医疗美容机构，由持有执业资格的专业医生进行面诊和治疗。请勿根据本站内容自行诊断或治疗，任何医疗决策都应在专业医生指导下进行。</p>
+                </div>
+
+                <div class="disclaimer-item">
+                    <h4><span class="material-symbols-outlined">lock</span>数据隐私声明</h4>
+                    <p>本站尊重并保护用户隐私。我们仅收集必要的访问统计数据用于改善服务质量，不会收集、存储或分享您的个人身份信息。本站使用的localStorage仅用于记录用户偏好设置（如阅读设置、弹窗显示状态），数据存储在您的本地浏览器中，不会上传至服务器。</p>
+                </div>
+            </section>
         </div>
     </div>
 
@@ -1459,6 +1697,19 @@
             // No longer used, but kept for any remaining references
         }
 
+        // About modal
+        function openAbout() {
+            document.getElementById('aboutOverlay').classList.add('active');
+            document.getElementById('aboutModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeAbout() {
+            document.getElementById('aboutOverlay').classList.remove('active');
+            document.getElementById('aboutModal').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
         // Mobile menu
         function toggleMobileMenu() {
             document.getElementById('mobileMenu').classList.toggle('active');
@@ -1470,7 +1721,10 @@
 
         // Close reader on escape key
         document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') closeReader();
+            if (e.key === 'Escape') {
+                closeReader();
+                closeAbout();
+            }
         });
 
         // Initial render

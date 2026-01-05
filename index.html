@@ -1343,7 +1343,7 @@
         function renderChapters(filteredChapters) {
             const grid = document.getElementById('chaptersGrid');
             grid.innerHTML = filteredChapters.map(chapter => `
-                <article class="chapter-card" onclick="openChapter('${chapter.file}', '${chapter.title}')">
+                <article class="chapter-card" onclick="openChapter('${chapter.file}')">
                     <div class="chapter-header">
                         <div class="chapter-number">${chapter.number}</div>
                         <h3>${chapter.title}</h3>
@@ -1378,52 +1378,14 @@
             renderChapters(filtered);
         }
 
-        // Open chapter in reader
-        async function openChapter(file, title) {
-            const reader = document.getElementById('reader');
-            const overlay = document.getElementById('readerOverlay');
-            const readerTitle = document.getElementById('readerTitle');
-            const readerContent = document.getElementById('readerContent');
-
-            reader.classList.add('active');
-            overlay.classList.add('active');
-            document.body.style.overflow = 'hidden';
-
-            readerTitle.textContent = title;
-
-            readerContent.innerHTML = `
-                <div class="loading">
-                    <div class="loading-spinner"></div>
-                    <span>加载中...</span>
-                </div>
-            `;
-
-            try {
-                const response = await fetch(file);
-                if (!response.ok) throw new Error('Failed to load chapter');
-                const markdown = await response.text();
-
-                marked.setOptions({
-                    breaks: true,
-                    gfm: true
-                });
-
-                readerContent.innerHTML = marked.parse(markdown);
-            } catch (error) {
-                readerContent.innerHTML = `
-                    <div class="loading">
-                        <span class="material-symbols-outlined" style="font-size: 48px; color: var(--color-text-muted);">error_outline</span>
-                        <p style="margin-top: 1rem; color: var(--color-text-light);">无法加载章节内容，请稍后重试</p>
-                    </div>
-                `;
-            }
+        // Open chapter in new window
+        function openChapter(file) {
+            window.open(`reader.html?file=${encodeURIComponent(file)}`, '_blank');
         }
 
-        // Close reader
+        // Close reader (legacy - kept for compatibility)
         function closeReader() {
-            document.getElementById('reader').classList.remove('active');
-            document.getElementById('readerOverlay').classList.remove('active');
-            document.body.style.overflow = '';
+            // No longer used, but kept for any remaining references
         }
 
         // Mobile menu

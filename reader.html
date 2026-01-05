@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <title>阅读中... | 美丽的心灵地图</title>
+    <meta name="description" content="医美消费心理学指南">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="https://docs.bccsw.cn/favicon.png">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500&family=Noto+Serif+SC:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <!-- Material Symbols -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap">
+
+    <!-- Marked.js -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+    <style>
+        :root {
+            --color-bg: #FAFAF9;
+            --color-surface: #FFFFFF;
+            --color-text: #3D3D3D;
+            --color-text-light: #737373;
+            --color-text-muted: #A3A3A3;
+            --color-border: #E5E5E5;
+            --color-border-light: #F0F0F0;
+            --color-primary: #9B8AA6;
+            --color-primary-light: #C9BED4;
+            --color-accent-warm: #F5E6D3;
+
+            --font-sans: 'Noto Sans SC', -apple-system, sans-serif;
+            --font-serif: 'Noto Serif SC', Georgia, serif;
+
+            --max-width: 720px;
+            --spacing-md: 1.5rem;
+            --spacing-lg: 2rem;
+            --spacing-xl: 3rem;
+        }
+
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            font-size: 16px;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-sans);
+            color: var(--color-text);
+            background: var(--color-bg);
+            line-height: 1.8;
+            letter-spacing: 0.02em;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Header */
+        .header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(250, 250, 249, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--color-border-light);
+        }
+
+        .header-inner {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 0.75rem var(--spacing-md);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--color-text-light);
+            text-decoration: none;
+            font-size: 0.875rem;
+            padding: 0.5rem 1rem;
+            border-radius: 100px;
+            transition: all 0.2s ease;
+        }
+
+        .back-btn:hover {
+            background: var(--color-border-light);
+            color: var(--color-text);
+        }
+
+        .back-btn .material-symbols-outlined {
+            font-size: 18px;
+        }
+
+        .header-title {
+            font-size: 0.875rem;
+            color: var(--color-text-light);
+            font-weight: 400;
+            max-width: 50%;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* Progress Bar */
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 2px;
+            background: var(--color-primary);
+            width: 0%;
+            z-index: 200;
+            transition: width 0.1s ease;
+        }
+
+        /* Main Content */
+        .main {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: var(--spacing-xl) var(--spacing-md);
+            min-height: calc(100vh - 200px);
+        }
+
+        /* Article Header */
+        .article-header {
+            margin-bottom: var(--spacing-xl);
+            padding-bottom: var(--spacing-lg);
+            border-bottom: 1px solid var(--color-border-light);
+        }
+
+        .article-chapter {
+            display: inline-block;
+            font-size: 0.75rem;
+            color: var(--color-primary);
+            background: var(--color-primary-light);
+            padding: 0.25rem 0.75rem;
+            border-radius: 100px;
+            margin-bottom: 1rem;
+            letter-spacing: 0.05em;
+        }
+
+        .article-title {
+            font-family: var(--font-serif);
+            font-size: clamp(1.75rem, 5vw, 2.25rem);
+            font-weight: 600;
+            line-height: 1.3;
+            margin-bottom: 0.75rem;
+            color: var(--color-text);
+        }
+
+        .article-subtitle {
+            font-size: 1.1rem;
+            color: var(--color-text-light);
+            font-weight: 300;
+        }
+
+        .article-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--color-text-muted);
+        }
+
+        .article-meta span {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+        }
+
+        .article-meta .material-symbols-outlined {
+            font-size: 16px;
+        }
+
+        /* Markdown Content */
+        .markdown-body {
+            font-family: var(--font-serif);
+            font-size: 1.05rem;
+            line-height: 2;
+            color: var(--color-text);
+        }
+
+        .markdown-body h1 {
+            font-size: 1.75rem;
+            font-weight: 600;
+            margin: var(--spacing-xl) 0 var(--spacing-md);
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid var(--color-border-light);
+            line-height: 1.4;
+        }
+
+        .markdown-body h2 {
+            font-size: 1.4rem;
+            font-weight: 500;
+            margin: var(--spacing-lg) 0 var(--spacing-md);
+            color: var(--color-text);
+            line-height: 1.4;
+        }
+
+        .markdown-body h3 {
+            font-size: 1.2rem;
+            font-weight: 500;
+            margin: var(--spacing-md) 0 1rem;
+            line-height: 1.4;
+        }
+
+        .markdown-body h4 {
+            font-size: 1.05rem;
+            font-weight: 500;
+            margin: var(--spacing-md) 0 0.75rem;
+        }
+
+        .markdown-body p {
+            margin-bottom: 1.5rem;
+            text-align: justify;
+        }
+
+        .markdown-body ul, .markdown-body ol {
+            margin-bottom: 1.5rem;
+            padding-left: 1.5rem;
+        }
+
+        .markdown-body li {
+            margin-bottom: 0.5rem;
+        }
+
+        .markdown-body li > ul, .markdown-body li > ol {
+            margin-top: 0.5rem;
+            margin-bottom: 0;
+        }
+
+        .markdown-body strong {
+            font-weight: 600;
+            color: var(--color-text);
+        }
+
+        .markdown-body em {
+            font-style: italic;
+        }
+
+        .markdown-body blockquote {
+            margin: var(--spacing-md) 0;
+            padding: 1rem 1.5rem;
+            border-left: 3px solid var(--color-primary);
+            background: linear-gradient(to right, var(--color-accent-warm), transparent);
+            color: var(--color-text-light);
+            font-style: italic;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .markdown-body blockquote p:last-child {
+            margin-bottom: 0;
+        }
+
+        .markdown-body hr {
+            border: none;
+            height: 1px;
+            background: var(--color-border-light);
+            margin: var(--spacing-xl) 0;
+        }
+
+        .markdown-body a {
+            color: var(--color-primary);
+            text-decoration: none;
+            border-bottom: 1px solid var(--color-primary-light);
+            transition: border-color 0.2s ease;
+        }
+
+        .markdown-body a:hover {
+            border-bottom-color: var(--color-primary);
+        }
+
+        .markdown-body code {
+            font-family: 'SF Mono', Monaco, monospace;
+            font-size: 0.9em;
+            background: var(--color-border-light);
+            padding: 0.2em 0.4em;
+            border-radius: 4px;
+        }
+
+        .markdown-body pre {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 1rem 1.25rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 1.5rem 0;
+        }
+
+        .markdown-body pre code {
+            background: none;
+            padding: 0;
+            font-size: 0.85rem;
+            line-height: 1.6;
+        }
+
+        .markdown-body table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            font-size: 0.95rem;
+        }
+
+        .markdown-body th, .markdown-body td {
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--color-border);
+            text-align: left;
+        }
+
+        .markdown-body th {
+            background: var(--color-bg);
+            font-weight: 500;
+        }
+
+        .markdown-body img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+        }
+
+        /* Loading State */
+        .loading {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: var(--spacing-xl);
+            min-height: 50vh;
+            color: var(--color-text-muted);
+        }
+
+        .loading-spinner {
+            width: 32px;
+            height: 32px;
+            border: 2px solid var(--color-border);
+            border-top-color: var(--color-primary);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin-bottom: 1rem;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Error State */
+        .error {
+            text-align: center;
+            padding: var(--spacing-xl);
+        }
+
+        .error .material-symbols-outlined {
+            font-size: 64px;
+            color: var(--color-text-muted);
+            margin-bottom: 1rem;
+        }
+
+        .error h2 {
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+            font-weight: 400;
+        }
+
+        .error p {
+            color: var(--color-text-light);
+        }
+
+        /* Footer */
+        .footer {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: var(--spacing-xl) var(--spacing-md);
+            border-top: 1px solid var(--color-border-light);
+            text-align: center;
+        }
+
+        .footer-nav {
+            display: flex;
+            justify-content: space-between;
+            gap: 1rem;
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .footer-nav a {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.25rem;
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+            border-radius: 8px;
+            color: var(--color-text-light);
+            text-decoration: none;
+            font-size: 0.875rem;
+            transition: all 0.2s ease;
+        }
+
+        .footer-nav a:hover {
+            border-color: var(--color-primary);
+            color: var(--color-text);
+        }
+
+        .footer-nav a.disabled {
+            opacity: 0.5;
+            pointer-events: none;
+        }
+
+        .footer-copyright {
+            font-size: 0.75rem;
+            color: var(--color-text-muted);
+        }
+
+        /* Mobile */
+        @media (max-width: 640px) {
+            :root {
+                --spacing-md: 1rem;
+                --spacing-lg: 1.5rem;
+                --spacing-xl: 2rem;
+            }
+
+            .markdown-body {
+                font-size: 1rem;
+            }
+
+            .header-title {
+                display: none;
+            }
+
+            .footer-nav {
+                flex-direction: column;
+            }
+
+            .footer-nav a {
+                justify-content: center;
+            }
+        }
+
+        /* Print Styles */
+        @media print {
+            .header, .footer, .progress-bar {
+                display: none;
+            }
+            .main {
+                padding: 0;
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Progress Bar -->
+    <div class="progress-bar" id="progressBar"></div>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="header-inner">
+            <a href="index.html" class="back-btn">
+                <span class="material-symbols-outlined">arrow_back</span>
+                返回目录
+            </a>
+            <div class="header-title" id="headerTitle">加载中...</div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main">
+        <article id="article">
+            <div class="loading" id="loading">
+                <div class="loading-spinner"></div>
+                <span>正在加载文章...</span>
+            </div>
+        </article>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer" id="footer" style="display: none;">
+        <nav class="footer-nav">
+            <a href="#" id="prevChapter" class="disabled">
+                <span class="material-symbols-outlined">chevron_left</span>
+                上一章
+            </a>
+            <a href="#" id="nextChapter" class="disabled">
+                下一章
+                <span class="material-symbols-outlined">chevron_right</span>
+            </a>
+        </nav>
+        <div class="footer-copyright">
+            <p>© 重庆联合丽格科技有限公司 | 美丽的心灵地图</p>
+        </div>
+    </footer>
+
+    <script>
+        // Chapter data
+        const chapters = [
+            { number: '序', title: '美丽的心灵地图', subtitle: '三个女人的美丽困惑与时代背景', file: '10-preface.md', readTime: '25分钟', wordCount: '1.5万字' },
+            { number: '1', title: '我们为什么想变美？', subtitle: '看见内心真实的渴望', file: '02-motivation.md', readTime: '20分钟', wordCount: '2.5万字' },
+            { number: '2', title: '从心动到行动', subtitle: '绘制你的专属决策地图', file: '03-decision-making.md', readTime: '20分钟', wordCount: '2.5万字' },
+            { number: '3', title: '营销的语言', subtitle: '如何听懂弦外之音', file: '04-marketing.md', readTime: '20分钟', wordCount: '2.5万字' },
+            { number: '4', title: '不同年龄的美丽密码', subtitle: '每个阶段都有专属答案', file: '05-age-stages.md', readTime: '20分钟', wordCount: '2.5万字' },
+            { number: '5', title: '美丽自我构建系统', subtitle: '理解你的内在运行机制', file: '06-self-system.md', readTime: '18分钟', wordCount: '2万字' },
+            { number: '6', title: '培养强大的定锚自我', subtitle: '你的幸福压舱石', file: '07-inner-confidence.md', readTime: '18分钟', wordCount: '2万字' },
+            { number: '7', title: '美丽与幸福', subtitle: '从外在改变到内在丰盈', file: '08-beauty-happiness.md', readTime: '18分钟', wordCount: '2万字' },
+            { number: '8', title: '做自己的美丽规划师', subtitle: '一份动态的人生蓝图', file: '09-beauty-planner.md', readTime: '20分钟', wordCount: '2.5万字' },
+            { number: '后记', title: '美丽心灵的共同探索', subtitle: '五年研究历程与未来展望', file: '11-epilogue.md', readTime: '22分钟', wordCount: '2万字' },
+            { number: '附录', title: '心理学效应速查表', subtitle: '50+常见心理学效应解析', file: '12-psychology-effects-list.md', readTime: '15分钟', wordCount: '1万字' }
+        ];
+
+        // Get file from URL
+        function getFileParam() {
+            const params = new URLSearchParams(window.location.search);
+            return params.get('file');
+        }
+
+        // Find chapter info
+        function getChapterInfo(filename) {
+            return chapters.find(c => c.file === filename);
+        }
+
+        // Find chapter index
+        function getChapterIndex(filename) {
+            return chapters.findIndex(c => c.file === filename);
+        }
+
+        // Update navigation
+        function updateNavigation(currentIndex) {
+            const prevBtn = document.getElementById('prevChapter');
+            const nextBtn = document.getElementById('nextChapter');
+
+            if (currentIndex > 0) {
+                prevBtn.classList.remove('disabled');
+                prevBtn.href = `reader.html?file=${chapters[currentIndex - 1].file}`;
+                prevBtn.innerHTML = `<span class="material-symbols-outlined">chevron_left</span>${chapters[currentIndex - 1].title}`;
+            }
+
+            if (currentIndex < chapters.length - 1) {
+                nextBtn.classList.remove('disabled');
+                nextBtn.href = `reader.html?file=${chapters[currentIndex + 1].file}`;
+                nextBtn.innerHTML = `${chapters[currentIndex + 1].title}<span class="material-symbols-outlined">chevron_right</span>`;
+            }
+        }
+
+        // Update progress bar on scroll
+        function updateProgress() {
+            const scrollTop = window.scrollY;
+            const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+            const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+            document.getElementById('progressBar').style.width = progress + '%';
+        }
+
+        // Load and render markdown
+        async function loadArticle() {
+            const file = getFileParam();
+
+            if (!file) {
+                showError('未指定文章', '请从目录页面选择要阅读的章节');
+                return;
+            }
+
+            const chapter = getChapterInfo(file);
+            const chapterIndex = getChapterIndex(file);
+
+            try {
+                const response = await fetch(file);
+                if (!response.ok) throw new Error('File not found');
+
+                const markdown = await response.text();
+
+                // Configure marked
+                marked.setOptions({
+                    breaks: true,
+                    gfm: true
+                });
+
+                // Render article
+                const article = document.getElementById('article');
+
+                if (chapter) {
+                    document.title = `${chapter.title} | 美丽的心灵地图`;
+                    document.getElementById('headerTitle').textContent = chapter.title;
+
+                    article.innerHTML = `
+                        <header class="article-header">
+                            <span class="article-chapter">第${chapter.number}章</span>
+                            <h1 class="article-title">${chapter.title}</h1>
+                            <p class="article-subtitle">${chapter.subtitle}</p>
+                            <div class="article-meta">
+                                <span><span class="material-symbols-outlined">schedule</span>${chapter.readTime}</span>
+                                <span><span class="material-symbols-outlined">article</span>${chapter.wordCount}</span>
+                            </div>
+                        </header>
+                        <div class="markdown-body">${marked.parse(markdown)}</div>
+                    `;
+
+                    updateNavigation(chapterIndex);
+                    document.getElementById('footer').style.display = 'block';
+                } else {
+                    // Generic markdown file
+                    document.title = `阅读 | 美丽的心灵地图`;
+                    document.getElementById('headerTitle').textContent = file;
+                    article.innerHTML = `<div class="markdown-body">${marked.parse(markdown)}</div>`;
+                }
+
+                // Scroll to top
+                window.scrollTo(0, 0);
+
+            } catch (error) {
+                showError('加载失败', '无法加载文章内容，请检查文件是否存在');
+            }
+        }
+
+        // Show error
+        function showError(title, message) {
+            document.getElementById('article').innerHTML = `
+                <div class="error">
+                    <span class="material-symbols-outlined">error_outline</span>
+                    <h2>${title}</h2>
+                    <p>${message}</p>
+                    <br>
+                    <a href="index.html" class="back-btn" style="display: inline-flex;">
+                        <span class="material-symbols-outlined">arrow_back</span>
+                        返回目录
+                    </a>
+                </div>
+            `;
+        }
+
+        // Event listeners
+        window.addEventListener('scroll', updateProgress);
+
+        // Initialize
+        loadArticle();
+    </script>
+</body>
+</html>

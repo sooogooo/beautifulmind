@@ -353,6 +353,21 @@
             font-weight: var(--font-weight-regular);
             color: var(--color-primary);
             margin-bottom: var(--spacing-xs);
+            transition: transform 0.3s ease;
+        }
+
+        .stat-item:hover .stat-number {
+            transform: scale(1.1);
+        }
+
+        /* CountUp animation trigger */
+        .stat-number.counting {
+            animation: countPulse 0.3s ease;
+        }
+
+        @keyframes countPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
         }
 
         .stat-label {
@@ -483,6 +498,38 @@
             border-color: var(--color-primary);
             transform: translateY(-2px);
             box-shadow: 0 8px 24px rgba(0,0,0,0.05);
+        }
+
+        /* Chapter card preview image */
+        .chapter-card {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .chapter-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 80px;
+            height: 80px;
+            background-size: cover;
+            background-position: center;
+            border-radius: 0 12px 0 50%;
+            opacity: 0;
+            transform: translate(20px, -20px);
+            transition: all 0.4s ease;
+            z-index: 0;
+        }
+
+        .chapter-card:hover::before {
+            opacity: 0.15;
+            transform: translate(0, 0);
+        }
+
+        .chapter-card > * {
+            position: relative;
+            z-index: 1;
         }
 
         .chapter-header {
@@ -999,17 +1046,17 @@
                     "我们不是因为看到了真实，才产生了行为；我们是先有了行为的冲动，然后才为这个冲动寻找理由。"<br>
                     <span style="display: block; text-align: right; margin-top: 0.5rem; font-style: normal;">——丹尼尔·卡纳曼</span>
                 </blockquote>
-                <div class="hero-stats">
+                <div class="hero-stats" id="heroStats">
                     <div class="stat-item">
-                        <div class="stat-number">10</div>
+                        <div class="stat-number" data-target="10" data-suffix="">0</div>
                         <div class="stat-label">核心章节</div>
                     </div>
                     <div class="stat-item">
-                        <div class="stat-number">20万+</div>
+                        <div class="stat-number" data-target="20" data-suffix="万+">0</div>
                         <div class="stat-label">专业字数</div>
                     </div>
                     <div class="stat-item">
-                        <div class="stat-number">60+</div>
+                        <div class="stat-number" data-target="60" data-suffix="+">0</div>
                         <div class="stat-label">实用工具</div>
                     </div>
                 </div>
@@ -1404,6 +1451,92 @@
 
         // Initial render
         renderChapters(chapters);
+
+        // ==================== CountUp Animation ====================
+        function animateCountUp(element) {
+            const target = parseInt(element.dataset.target);
+            const suffix = element.dataset.suffix || '';
+            const duration = 1500; // ms
+            const startTime = performance.now();
+
+            element.classList.add('counting');
+
+            function update(currentTime) {
+                const elapsed = currentTime - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+
+                // Ease out cubic for smooth deceleration
+                const easeOut = 1 - Math.pow(1 - progress, 3);
+                const current = Math.floor(easeOut * target);
+
+                element.textContent = current + suffix;
+
+                if (progress < 1) {
+                    requestAnimationFrame(update);
+                } else {
+                    element.textContent = target + suffix;
+                    element.classList.remove('counting');
+                }
+            }
+
+            requestAnimationFrame(update);
+        }
+
+        // Observe hero stats for CountUp trigger
+        const statsObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const statNumbers = entry.target.querySelectorAll('.stat-number');
+                    statNumbers.forEach((el, index) => {
+                        // Stagger the animations
+                        setTimeout(() => animateCountUp(el), index * 200);
+                    });
+                    statsObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.5 });
+
+        const heroStats = document.getElementById('heroStats');
+        if (heroStats) {
+            statsObserver.observe(heroStats);
+        }
+
+        // ==================== Chapter Card Preview Images ====================
+        const previewImages = [
+            'images/portrait-01.jpg', 'images/portrait-02.jpg', 'images/portrait-03.jpg',
+            'images/portrait-04.jpg', 'images/portrait-05.jpg', 'images/portrait-06.jpg',
+            'images/aiart-17.jpg', 'images/aiart-28.jpg', 'images/aiart-39.jpg',
+            'images/aiart-51.jpg', 'images/aiart-59.jpg', 'images/aiart-72.jpg'
+        ];
+
+        function assignPreviewImages() {
+            const cards = document.querySelectorAll('.chapter-card');
+            const shuffled = [...previewImages].sort(() => Math.random() - 0.5);
+
+            cards.forEach((card, index) => {
+                const imgUrl = shuffled[index % shuffled.length];
+                card.style.setProperty('--preview-image', `url('${imgUrl}')`);
+            });
+        }
+
+        // Update CSS to use the custom property
+        const previewStyle = document.createElement('style');
+        previewStyle.textContent = `
+            .chapter-card::before {
+                background-image: var(--preview-image);
+            }
+        `;
+        document.head.appendChild(previewStyle);
+
+        // Assign images after initial render
+        assignPreviewImages();
+
+        // Re-assign when chapters are filtered
+        const originalFilterChapters = filterChapters;
+        filterChapters = function(category) {
+            originalFilterChapters(category);
+            setTimeout(assignPreviewImages, 10);
+        };
     </script>
 </body>
 </html>

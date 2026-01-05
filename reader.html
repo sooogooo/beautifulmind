@@ -23,7 +23,9 @@
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 
     <style>
+        /* ==================== Theme System ==================== */
         :root {
+            /* Default Theme: Classic */
             --color-bg: #FAFAF9;
             --color-bg-alt: #F5F5F4;
             --color-surface: #FFFFFF;
@@ -34,18 +36,89 @@
             --color-border-light: #F0F0F0;
             --color-primary: #9B8AA6;
             --color-primary-light: #C9BED4;
+            --color-accent: #E8B4B8;
             --color-accent-warm: #F5E6D3;
 
+            /* Reader Settings (can be overridden by JS) */
+            --reader-font: 'Noto Serif SC', Georgia, serif;
+            --reader-font-size: 1.05rem;
+            --reader-line-height: 2;
+            --content-max-width: 720px;
+
+            /* Fixed values */
             --font-sans: 'Noto Sans SC', -apple-system, sans-serif;
             --font-serif: 'Noto Serif SC', Georgia, serif;
-
-            --max-width: 720px;
             --toc-width: 260px;
             --spacing-md: 1.5rem;
             --spacing-lg: 2rem;
             --spacing-xl: 3rem;
         }
 
+        /* Theme: Warm Paper (护眼) */
+        [data-theme="warm"] {
+            --color-bg: #F5F0E6;
+            --color-bg-alt: #EDE6D8;
+            --color-surface: #FAF7F0;
+            --color-text: #4A4A4A;
+            --color-text-light: #6B6B6B;
+            --color-text-muted: #999999;
+            --color-border: #DDD5C5;
+            --color-border-light: #E8E0D0;
+            --color-primary: #B8927A;
+            --color-primary-light: #D4C4B0;
+            --color-accent: #C9A88A;
+            --color-accent-warm: #EDE0D0;
+        }
+
+        /* Theme: Dark Night (夜间) */
+        [data-theme="dark"] {
+            --color-bg: #1A1A1A;
+            --color-bg-alt: #242424;
+            --color-surface: #2D2D2D;
+            --color-text: #E0E0E0;
+            --color-text-light: #B0B0B0;
+            --color-text-muted: #808080;
+            --color-border: #404040;
+            --color-border-light: #353535;
+            --color-primary: #B8A5C7;
+            --color-primary-light: #4A4055;
+            --color-accent: #C9A5A8;
+            --color-accent-warm: #3D3530;
+        }
+
+        /* Theme: Mint (薄荷) */
+        [data-theme="mint"] {
+            --color-bg: #E8F4F0;
+            --color-bg-alt: #D8EBE5;
+            --color-surface: #F0FAF7;
+            --color-text: #2D4A44;
+            --color-text-light: #4A6B64;
+            --color-text-muted: #7A9A94;
+            --color-border: #C5DDD7;
+            --color-border-light: #D5EAE4;
+            --color-primary: #5A9A8A;
+            --color-primary-light: #B5D8CE;
+            --color-accent: #7AB5A5;
+            --color-accent-warm: #D0E8E0;
+        }
+
+        /* Theme: Rose (玫瑰) */
+        [data-theme="rose"] {
+            --color-bg: #FDF5F5;
+            --color-bg-alt: #F8ECEC;
+            --color-surface: #FFFAFA;
+            --color-text: #5A4A4A;
+            --color-text-light: #7A6A6A;
+            --color-text-muted: #A09595;
+            --color-border: #E8D5D5;
+            --color-border-light: #F0E0E0;
+            --color-primary: #C89B9B;
+            --color-primary-light: #E8D0D0;
+            --color-accent: #D4A8A8;
+            --color-accent-warm: #F5E5E5;
+        }
+
+        /* ==================== Base Styles ==================== */
         *, *::before, *::after {
             box-sizing: border-box;
             margin: 0;
@@ -64,25 +137,38 @@
             line-height: 1.8;
             letter-spacing: 0.02em;
             -webkit-font-smoothing: antialiased;
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
 
-        /* Header */
+        /* ==================== Header ==================== */
         .header {
             position: sticky;
             top: 0;
             z-index: 100;
-            background: rgba(250, 250, 249, 0.95);
+            background: var(--color-bg);
             backdrop-filter: blur(10px);
             border-bottom: 1px solid var(--color-border-light);
+            transition: background-color 0.3s ease;
+        }
+
+        [data-theme="dark"] .header {
+            background: rgba(26, 26, 26, 0.95);
         }
 
         .header-inner {
-            max-width: calc(var(--max-width) + var(--toc-width) + 100px);
+            max-width: calc(var(--content-max-width) + var(--toc-width) + 100px);
             margin: 0 auto;
             padding: 0.75rem var(--spacing-md);
             display: flex;
             align-items: center;
             justify-content: space-between;
+            gap: 0.5rem;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
         }
 
         .back-btn {
@@ -106,47 +192,340 @@
             font-size: 18px;
         }
 
+        .header-center {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+        }
+
         .header-title {
             font-size: 0.875rem;
             color: var(--color-text-light);
             font-weight: 400;
-            max-width: 50%;
+            max-width: 300px;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
         }
 
-        .toc-toggle {
-            display: none;
+        .progress-text {
+            font-size: 0.75rem;
+            color: var(--color-text-muted);
+            min-width: 45px;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .header-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
             background: none;
             border: 1px solid var(--color-border);
             border-radius: 8px;
             padding: 0.5rem;
             cursor: pointer;
             color: var(--color-text-light);
+            transition: all 0.2s ease;
         }
 
-        /* Progress Bar */
+        .header-btn:hover {
+            background: var(--color-border-light);
+            color: var(--color-text);
+        }
+
+        .header-btn .material-symbols-outlined {
+            font-size: 20px;
+        }
+
+        .toc-toggle {
+            display: none;
+        }
+
+        /* ==================== Progress Bar ==================== */
         .progress-bar {
             position: fixed;
             top: 0;
             left: 0;
-            height: 2px;
-            background: var(--color-primary);
+            height: 3px;
+            background: linear-gradient(90deg, var(--color-primary) 0%, var(--color-accent) 100%);
             width: 0%;
             z-index: 200;
             transition: width 0.1s ease;
         }
 
-        /* Layout */
+        /* ==================== Settings Panel ==================== */
+        .settings-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .settings-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .settings-panel {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.95);
+            background: var(--color-surface);
+            border-radius: 16px;
+            padding: 1.5rem;
+            width: 90%;
+            max-width: 360px;
+            z-index: 1001;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+        }
+
+        .settings-panel.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        .settings-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--color-border-light);
+        }
+
+        .settings-title {
+            font-size: 1rem;
+            font-weight: 500;
+            color: var(--color-text);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .settings-close {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--color-text-muted);
+            padding: 0.25rem;
+            display: flex;
+        }
+
+        .settings-close:hover {
+            color: var(--color-text);
+        }
+
+        .settings-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .settings-label {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.85rem;
+            color: var(--color-text-light);
+            margin-bottom: 0.75rem;
+        }
+
+        .settings-label .material-symbols-outlined {
+            font-size: 18px;
+            color: var(--color-primary);
+        }
+
+        /* Font Select */
+        .font-select {
+            width: 100%;
+            padding: 0.6rem 1rem;
+            border: 1px solid var(--color-border);
+            border-radius: 8px;
+            background: var(--color-bg);
+            color: var(--color-text);
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: border-color 0.2s ease;
+        }
+
+        .font-select:focus {
+            outline: none;
+            border-color: var(--color-primary);
+        }
+
+        /* Size Slider */
+        .size-slider-container {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .size-label {
+            font-size: 0.8rem;
+            color: var(--color-text-muted);
+            min-width: 20px;
+            text-align: center;
+        }
+
+        .size-label.small { font-size: 0.75rem; }
+        .size-label.large { font-size: 1.1rem; }
+
+        .size-slider {
+            flex: 1;
+            height: 4px;
+            -webkit-appearance: none;
+            appearance: none;
+            background: var(--color-border);
+            border-radius: 2px;
+            cursor: pointer;
+        }
+
+        .size-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            background: var(--color-primary);
+            border-radius: 50%;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .size-slider::-webkit-slider-thumb:hover {
+            transform: scale(1.1);
+        }
+
+        /* Radio Buttons */
+        .radio-group {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .radio-btn {
+            flex: 1;
+            padding: 0.6rem;
+            border: 1px solid var(--color-border);
+            border-radius: 8px;
+            background: var(--color-bg);
+            color: var(--color-text-light);
+            font-size: 0.8rem;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.2s ease;
+        }
+
+        .radio-btn:hover {
+            border-color: var(--color-primary);
+        }
+
+        .radio-btn.active {
+            background: var(--color-primary-light);
+            border-color: var(--color-primary);
+            color: var(--color-text);
+        }
+
+        /* Theme Selector */
+        .theme-selector {
+            display: flex;
+            gap: 0.75rem;
+            justify-content: center;
+        }
+
+        .theme-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 3px solid transparent;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            position: relative;
+        }
+
+        .theme-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .theme-btn.active {
+            border-color: var(--color-primary);
+        }
+
+        .theme-btn::after {
+            content: '';
+            position: absolute;
+            bottom: -18px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.65rem;
+            color: var(--color-text-muted);
+            white-space: nowrap;
+        }
+
+        .theme-btn[data-theme="classic"] { background: linear-gradient(135deg, #FAFAF9 50%, #9B8AA6 50%); }
+        .theme-btn[data-theme="warm"] { background: linear-gradient(135deg, #F5F0E6 50%, #B8927A 50%); }
+        .theme-btn[data-theme="dark"] { background: linear-gradient(135deg, #1A1A1A 50%, #B8A5C7 50%); }
+        .theme-btn[data-theme="mint"] { background: linear-gradient(135deg, #E8F4F0 50%, #5A9A8A 50%); }
+        .theme-btn[data-theme="rose"] { background: linear-gradient(135deg, #FDF5F5 50%, #C89B9B 50%); }
+
+        .theme-names {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 0.5rem;
+            font-size: 0.7rem;
+            color: var(--color-text-muted);
+        }
+
+        /* Reset Button */
+        .reset-btn {
+            width: 100%;
+            padding: 0.7rem;
+            border: 1px solid var(--color-border);
+            border-radius: 8px;
+            background: transparent;
+            color: var(--color-text-light);
+            font-size: 0.85rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            transition: all 0.2s ease;
+            margin-top: 1rem;
+        }
+
+        .reset-btn:hover {
+            background: var(--color-border-light);
+            color: var(--color-text);
+        }
+
+        .reset-btn .material-symbols-outlined {
+            font-size: 18px;
+        }
+
+        /* ==================== Layout ==================== */
         .layout {
             display: flex;
-            max-width: calc(var(--max-width) + var(--toc-width) + 100px);
+            max-width: calc(var(--content-max-width) + var(--toc-width) + 100px);
             margin: 0 auto;
             position: relative;
         }
 
-        /* TOC Sidebar */
+        /* ==================== TOC Sidebar ==================== */
         .toc-sidebar {
             width: var(--toc-width);
             flex-shrink: 0;
@@ -157,13 +536,19 @@
             overflow-y: auto;
         }
 
+        .toc-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+
         .toc-title {
             font-size: 0.75rem;
             font-weight: 500;
             color: var(--color-text-muted);
             text-transform: uppercase;
             letter-spacing: 0.1em;
-            margin-bottom: 1rem;
             display: flex;
             align-items: center;
             gap: 0.5rem;
@@ -178,7 +563,7 @@
         }
 
         .toc-item {
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.25rem;
         }
 
         .toc-link {
@@ -186,8 +571,9 @@
             font-size: 0.85rem;
             color: var(--color-text-light);
             text-decoration: none;
-            padding: 0.35rem 0.75rem;
+            padding: 0.4rem 0.75rem;
             border-left: 2px solid transparent;
+            border-radius: 0 6px 6px 0;
             transition: all 0.2s ease;
             line-height: 1.4;
         }
@@ -195,6 +581,7 @@
         .toc-link:hover {
             color: var(--color-text);
             background: var(--color-bg-alt);
+            transform: translateX(4px);
         }
 
         .toc-link.active {
@@ -208,7 +595,7 @@
             font-size: 0.8rem;
         }
 
-        /* Decorative Image */
+        /* TOC Decorative Image */
         .toc-decor {
             margin-top: var(--spacing-lg);
             border-radius: 12px;
@@ -222,32 +609,49 @@
             display: block;
         }
 
-        /* Main Content */
+        /* ==================== Main Content ==================== */
         .main {
             flex: 1;
-            max-width: var(--max-width);
+            max-width: var(--content-max-width);
             padding: var(--spacing-xl) var(--spacing-md);
             min-height: calc(100vh - 200px);
         }
 
-        /* Article Header */
-        .article-header {
-            margin-bottom: var(--spacing-xl);
-            padding-bottom: var(--spacing-lg);
-            border-bottom: 1px solid var(--color-border-light);
+        /* ==================== Hero Header ==================== */
+        .article-hero {
             position: relative;
+            margin: calc(-1 * var(--spacing-xl)) calc(-1 * var(--spacing-md)) var(--spacing-xl);
+            padding: var(--spacing-xl) var(--spacing-md);
+            background-size: cover;
+            background-position: center;
+            overflow: hidden;
         }
 
-        .article-decor {
+        .article-hero::before {
+            content: '';
             position: absolute;
-            right: -20px;
-            top: -20px;
-            width: 120px;
-            height: 120px;
-            border-radius: 50%;
-            object-fit: cover;
-            opacity: 0.15;
-            pointer-events: none;
+            inset: 0;
+            background: linear-gradient(to bottom,
+                var(--color-bg) 0%,
+                rgba(250, 250, 249, 0.85) 50%,
+                var(--color-bg) 100%
+            );
+        }
+
+        [data-theme="dark"] .article-hero::before {
+            background: linear-gradient(to bottom,
+                var(--color-bg) 0%,
+                rgba(26, 26, 26, 0.85) 50%,
+                var(--color-bg) 100%
+            );
+        }
+
+        .article-hero-content {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            max-width: 600px;
+            margin: 0 auto;
         }
 
         .article-chapter {
@@ -263,26 +667,30 @@
 
         .article-title {
             font-family: var(--font-serif);
-            font-size: clamp(1.75rem, 5vw, 2.25rem);
+            font-size: clamp(1.75rem, 5vw, 2.5rem);
             font-weight: 600;
             line-height: 1.3;
             margin-bottom: 0.75rem;
             color: var(--color-text);
+            animation: fadeInUp 0.6s ease;
         }
 
         .article-subtitle {
             font-size: 1.1rem;
             color: var(--color-text-light);
             font-weight: 300;
+            animation: fadeInUp 0.6s ease 0.1s both;
         }
 
         .article-meta {
             display: flex;
             flex-wrap: wrap;
+            justify-content: center;
             gap: 1.5rem;
             margin-top: 1.5rem;
             font-size: 0.8rem;
             color: var(--color-text-muted);
+            animation: fadeInUp 0.6s ease 0.2s both;
         }
 
         .article-meta span {
@@ -295,11 +703,22 @@
             font-size: 16px;
         }
 
-        /* Markdown Content */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ==================== Markdown Content ==================== */
         .markdown-body {
-            font-family: var(--font-serif);
-            font-size: 1.05rem;
-            line-height: 2;
+            font-family: var(--reader-font);
+            font-size: var(--reader-font-size);
+            line-height: var(--reader-line-height);
             color: var(--color-text);
         }
 
@@ -307,6 +726,18 @@
         .markdown-body h2,
         .markdown-body h3 {
             scroll-margin-top: 80px;
+            animation: slideInLeft 0.5s ease;
+        }
+
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-15px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
         }
 
         .markdown-body h1 {
@@ -324,6 +755,19 @@
             margin: var(--spacing-lg) 0 var(--spacing-md);
             color: var(--color-text);
             line-height: 1.4;
+            position: relative;
+            padding-left: 1rem;
+        }
+
+        .markdown-body h2::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0.2em;
+            bottom: 0.2em;
+            width: 3px;
+            background: var(--color-primary);
+            border-radius: 2px;
         }
 
         .markdown-body h3 {
@@ -351,6 +795,11 @@
 
         .markdown-body li {
             margin-bottom: 0.5rem;
+            position: relative;
+        }
+
+        .markdown-body ul > li::marker {
+            color: var(--color-primary);
         }
 
         .markdown-body li > ul, .markdown-body li > ol {
@@ -367,25 +816,60 @@
             font-style: italic;
         }
 
+        /* Enhanced Blockquote */
         .markdown-body blockquote {
             margin: var(--spacing-md) 0;
-            padding: 1rem 1.5rem;
+            padding: 1.5rem 1.5rem 1.5rem 3rem;
             border-left: 3px solid var(--color-primary);
             background: linear-gradient(to right, var(--color-accent-warm), transparent);
             color: var(--color-text-light);
             font-style: italic;
-            border-radius: 0 8px 8px 0;
+            border-radius: 0 12px 12px 0;
+            position: relative;
+        }
+
+        .markdown-body blockquote::before {
+            content: '"';
+            position: absolute;
+            left: 0.75rem;
+            top: 0.5rem;
+            font-size: 2.5rem;
+            color: var(--color-primary);
+            font-family: Georgia, serif;
+            line-height: 1;
+            opacity: 0.5;
         }
 
         .markdown-body blockquote p:last-child {
             margin-bottom: 0;
         }
 
+        /* Section Divider */
         .markdown-body hr {
             border: none;
-            height: 1px;
-            background: var(--color-border-light);
+            height: auto;
             margin: var(--spacing-xl) 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .markdown-body hr::before,
+        .markdown-body hr::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: linear-gradient(to right, transparent, var(--color-border), transparent);
+        }
+
+        .section-divider-img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+            opacity: 0.7;
+            border: 2px solid var(--color-border-light);
         }
 
         .markdown-body a {
@@ -414,6 +898,7 @@
             border-radius: 8px;
             overflow-x: auto;
             margin: 1.5rem 0;
+            position: relative;
         }
 
         .markdown-body pre code {
@@ -423,6 +908,7 @@
             line-height: 1.6;
         }
 
+        /* Enhanced Table */
         .markdown-body table {
             width: 100%;
             border-collapse: collapse;
@@ -437,8 +923,16 @@
         }
 
         .markdown-body th {
-            background: var(--color-bg);
+            background: var(--color-bg-alt);
             font-weight: 500;
+        }
+
+        .markdown-body tr:nth-child(even) {
+            background: var(--color-bg-alt);
+        }
+
+        .markdown-body tr:hover {
+            background: var(--color-primary-light);
         }
 
         .markdown-body img {
@@ -446,9 +940,15 @@
             height: auto;
             border-radius: 8px;
             margin: 1.5rem 0;
+            cursor: zoom-in;
+            transition: transform 0.3s ease;
         }
 
-        /* Chapter Navigation */
+        .markdown-body img:hover {
+            transform: scale(1.02);
+        }
+
+        /* ==================== Chapter Navigation ==================== */
         .chapter-nav {
             display: flex;
             justify-content: space-between;
@@ -476,6 +976,8 @@
         .chapter-nav a:hover {
             border-color: var(--color-primary);
             color: var(--color-text);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
         }
 
         .chapter-nav a.disabled {
@@ -489,7 +991,114 @@
             white-space: nowrap;
         }
 
-        /* Footer - Same as main page */
+        /* ==================== Back to Top Button ==================== */
+        .back-to-top {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+            color: var(--color-text-light);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(20px);
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            z-index: 90;
+        }
+
+        .back-to-top.visible {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .back-to-top:hover {
+            background: var(--color-primary);
+            border-color: var(--color-primary);
+            color: white;
+            transform: translateY(-3px);
+        }
+
+        /* ==================== Floating Decoration ==================== */
+        .floating-decor {
+            position: fixed;
+            right: 2rem;
+            bottom: 25%;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            opacity: 0.12;
+            pointer-events: none;
+            animation: gentleFloat 8s ease-in-out infinite;
+            z-index: 1;
+        }
+
+        @keyframes gentleFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+
+        /* ==================== Image Lightbox ==================== */
+        .lightbox {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 2000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            cursor: zoom-out;
+        }
+
+        .lightbox.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .lightbox img {
+            max-width: 90%;
+            max-height: 90%;
+            object-fit: contain;
+            border-radius: 8px;
+        }
+
+        .lightbox-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s ease;
+        }
+
+        .lightbox-close:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        /* ==================== Footer ==================== */
         .footer {
             border-top: 1px solid var(--color-border);
             padding: var(--spacing-xl) 0 var(--spacing-lg);
@@ -498,7 +1107,7 @@
         }
 
         .footer-content {
-            max-width: calc(var(--max-width) + var(--toc-width) + 100px);
+            max-width: calc(var(--content-max-width) + var(--toc-width) + 100px);
             margin: 0 auto;
             padding: 0 var(--spacing-md);
             display: grid;
@@ -556,7 +1165,7 @@
             color: var(--color-text);
         }
 
-        /* Loading State */
+        /* ==================== Loading & Error States ==================== */
         .loading {
             display: flex;
             flex-direction: column;
@@ -581,7 +1190,6 @@
             to { transform: rotate(360deg); }
         }
 
-        /* Error State */
         .error {
             text-align: center;
             padding: var(--spacing-xl);
@@ -603,7 +1211,32 @@
             color: var(--color-text-light);
         }
 
-        /* Mobile Styles */
+        /* ==================== Keyboard Shortcuts Hint ==================== */
+        .shortcuts-hint {
+            position: fixed;
+            bottom: 1rem;
+            left: 1rem;
+            font-size: 0.7rem;
+            color: var(--color-text-muted);
+            opacity: 0.6;
+            display: none;
+        }
+
+        .shortcuts-hint kbd {
+            background: var(--color-border-light);
+            padding: 0.1em 0.4em;
+            border-radius: 3px;
+            font-family: inherit;
+            margin: 0 0.1em;
+        }
+
+        /* ==================== Responsive Styles ==================== */
+        @media (min-width: 1025px) {
+            .shortcuts-hint {
+                display: block;
+            }
+        }
+
         @media (max-width: 1024px) {
             .toc-sidebar {
                 display: none;
@@ -614,10 +1247,12 @@
                 bottom: 0;
                 width: 100%;
                 height: auto;
+                max-height: calc(100vh - 60px);
                 background: var(--color-surface);
                 z-index: 99;
                 padding: var(--spacing-md);
                 border-bottom: 1px solid var(--color-border);
+                overflow-y: auto;
             }
 
             .toc-sidebar.active {
@@ -641,6 +1276,10 @@
             .main {
                 max-width: 100%;
             }
+
+            .floating-decor {
+                display: none;
+            }
         }
 
         @media (max-width: 640px) {
@@ -650,11 +1289,11 @@
                 --spacing-xl: 2rem;
             }
 
-            .markdown-body {
-                font-size: 1rem;
+            .header-title {
+                display: none;
             }
 
-            .header-title {
+            .progress-text {
                 display: none;
             }
 
@@ -667,53 +1306,183 @@
                 justify-content: center;
             }
 
-            .article-decor {
-                display: none;
+            .back-to-top {
+                bottom: 1rem;
+                right: 1rem;
+                width: 44px;
+                height: 44px;
             }
 
             .footer-content {
                 gap: var(--spacing-md);
             }
+
+            .settings-panel {
+                padding: 1.25rem;
+            }
         }
 
-        /* Print Styles */
+        /* ==================== Print Styles ==================== */
         @media print {
-            .header, .footer, .progress-bar, .toc-sidebar, .chapter-nav {
-                display: none;
+            .header, .footer, .progress-bar, .toc-sidebar, .chapter-nav,
+            .back-to-top, .floating-decor, .settings-overlay, .settings-panel,
+            .shortcuts-hint {
+                display: none !important;
             }
             .main {
                 padding: 0;
                 max-width: 100%;
             }
+            body {
+                background: white;
+                color: black;
+            }
+        }
+
+        /* ==================== Reduced Motion ==================== */
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+            html {
+                scroll-behavior: auto;
+            }
         }
     </style>
 </head>
-<body>
+<body data-theme="classic">
     <!-- Progress Bar -->
     <div class="progress-bar" id="progressBar"></div>
 
     <!-- Header -->
     <header class="header">
         <div class="header-inner">
-            <a href="index.html" class="back-btn">
-                <span class="material-symbols-outlined">arrow_back</span>
-                返回目录
-            </a>
-            <div class="header-title" id="headerTitle">加载中...</div>
-            <button class="toc-toggle" onclick="toggleToc()">
-                <span class="material-symbols-outlined">toc</span>
-                目录
-            </button>
+            <div class="header-left">
+                <a href="index.html" class="back-btn">
+                    <span class="material-symbols-outlined">arrow_back</span>
+                    <span class="back-text">返回</span>
+                </a>
+            </div>
+            <div class="header-center">
+                <div class="header-title" id="headerTitle">加载中...</div>
+                <span class="progress-text" id="progressText">0%</span>
+            </div>
+            <div class="header-right">
+                <button class="header-btn" onclick="openSettings()" title="阅读设置">
+                    <span class="material-symbols-outlined">tune</span>
+                </button>
+                <button class="header-btn toc-toggle" onclick="toggleToc()" title="目录">
+                    <span class="material-symbols-outlined">toc</span>
+                </button>
+            </div>
         </div>
     </header>
+
+    <!-- Settings Overlay -->
+    <div class="settings-overlay" id="settingsOverlay" onclick="closeSettings()"></div>
+
+    <!-- Settings Panel -->
+    <div class="settings-panel" id="settingsPanel">
+        <div class="settings-header">
+            <div class="settings-title">
+                <span class="material-symbols-outlined">tune</span>
+                阅读设置
+            </div>
+            <button class="settings-close" onclick="closeSettings()">
+                <span class="material-symbols-outlined">close</span>
+            </button>
+        </div>
+
+        <div class="settings-group">
+            <div class="settings-label">
+                <span class="material-symbols-outlined">text_fields</span>
+                字体
+            </div>
+            <select class="font-select" id="fontSelect" onchange="updateFont(this.value)">
+                <option value="'Noto Serif SC', Georgia, serif">思源宋体（默认）</option>
+                <option value="'Noto Sans SC', sans-serif">思源黑体</option>
+                <option value="Georgia, 'Noto Serif SC', serif">Georgia 混排</option>
+                <option value="system-ui, sans-serif">系统默认</option>
+            </select>
+        </div>
+
+        <div class="settings-group">
+            <div class="settings-label">
+                <span class="material-symbols-outlined">format_size</span>
+                字号
+            </div>
+            <div class="size-slider-container">
+                <span class="size-label small">A</span>
+                <input type="range" class="size-slider" id="sizeSlider"
+                       min="0.9" max="1.3" step="0.05" value="1.05"
+                       onchange="updateFontSize(this.value)"
+                       oninput="updateFontSize(this.value)">
+                <span class="size-label large">A</span>
+            </div>
+        </div>
+
+        <div class="settings-group">
+            <div class="settings-label">
+                <span class="material-symbols-outlined">format_line_spacing</span>
+                行距
+            </div>
+            <div class="radio-group" id="lineHeightGroup">
+                <button class="radio-btn" data-value="1.6" onclick="updateLineHeight(1.6)">紧凑</button>
+                <button class="radio-btn active" data-value="2" onclick="updateLineHeight(2)">标准</button>
+                <button class="radio-btn" data-value="2.4" onclick="updateLineHeight(2.4)">宽松</button>
+            </div>
+        </div>
+
+        <div class="settings-group">
+            <div class="settings-label">
+                <span class="material-symbols-outlined">width</span>
+                页面宽度
+            </div>
+            <div class="radio-group" id="widthGroup">
+                <button class="radio-btn" data-value="600" onclick="updateWidth(600)">窄</button>
+                <button class="radio-btn active" data-value="720" onclick="updateWidth(720)">中</button>
+                <button class="radio-btn" data-value="860" onclick="updateWidth(860)">宽</button>
+            </div>
+        </div>
+
+        <div class="settings-group">
+            <div class="settings-label">
+                <span class="material-symbols-outlined">palette</span>
+                主题
+            </div>
+            <div class="theme-selector">
+                <button class="theme-btn active" data-theme="classic" onclick="updateTheme('classic')" title="经典白"></button>
+                <button class="theme-btn" data-theme="warm" onclick="updateTheme('warm')" title="暖纸色"></button>
+                <button class="theme-btn" data-theme="dark" onclick="updateTheme('dark')" title="深夜黑"></button>
+                <button class="theme-btn" data-theme="mint" onclick="updateTheme('mint')" title="薄荷绿"></button>
+                <button class="theme-btn" data-theme="rose" onclick="updateTheme('rose')" title="玫瑰粉"></button>
+            </div>
+            <div class="theme-names">
+                <span>经典</span>
+                <span>护眼</span>
+                <span>夜间</span>
+                <span>薄荷</span>
+                <span>玫瑰</span>
+            </div>
+        </div>
+
+        <button class="reset-btn" onclick="resetSettings()">
+            <span class="material-symbols-outlined">restart_alt</span>
+            恢复默认
+        </button>
+    </div>
 
     <!-- Layout -->
     <div class="layout">
         <!-- TOC Sidebar -->
         <aside class="toc-sidebar" id="tocSidebar">
-            <div class="toc-title">
-                <span class="material-symbols-outlined">list</span>
-                本章目录
+            <div class="toc-header">
+                <div class="toc-title">
+                    <span class="material-symbols-outlined">list</span>
+                    本章目录
+                </div>
             </div>
             <nav>
                 <ul class="toc-list" id="tocList">
@@ -736,7 +1505,23 @@
         </main>
     </div>
 
-    <!-- Footer - Same as main page -->
+    <!-- Back to Top Button -->
+    <button class="back-to-top" id="backToTop" onclick="scrollToTop()" title="返回顶部">
+        <span class="material-symbols-outlined">keyboard_arrow_up</span>
+    </button>
+
+    <!-- Floating Decoration -->
+    <img src="" alt="" class="floating-decor" id="floatingDecor" loading="lazy">
+
+    <!-- Image Lightbox -->
+    <div class="lightbox" id="lightbox" onclick="closeLightbox()">
+        <button class="lightbox-close">
+            <span class="material-symbols-outlined">close</span>
+        </button>
+        <img src="" alt="" id="lightboxImg">
+    </div>
+
+    <!-- Footer -->
     <footer class="footer" id="footer">
         <div class="footer-content">
             <div class="footer-brand">
@@ -766,25 +1551,149 @@
         </div>
     </footer>
 
-    <script>
-        // Random decorative images
-        const decorImages = [
-            'images/portrait-01.jpg', 'images/portrait-02.jpg', 'images/portrait-03.jpg',
-            'images/portrait-04.jpg', 'images/portrait-05.jpg', 'images/portrait-06.jpg',
-            'images/portrait-07.jpg', 'images/portrait-08.jpg', 'images/portrait-09.jpg',
-            'images/portrait-10.jpg', 'images/portrait-11.jpg', 'images/portrait-12.jpg',
-            'images/aiart-17.jpg', 'images/aiart-28.jpg', 'images/aiart-39.jpg',
-            'images/era-2020s-01.jpg', 'images/era-2020s-02.jpg', 'images/era-2010s-01.jpg'
-        ];
+    <!-- Keyboard Shortcuts Hint -->
+    <div class="shortcuts-hint">
+        <kbd>←</kbd><kbd>→</kbd> 切换章节 · <kbd>T</kbd> 目录 · <kbd>S</kbd> 设置
+    </div>
 
-        function setRandomDecorImages() {
-            const shuffled = decorImages.sort(() => Math.random() - 0.5);
-            document.getElementById('tocDecorImg').src = shuffled[0];
-            const articleDecor = document.getElementById('articleDecorImg');
-            if (articleDecor) articleDecor.src = shuffled[1];
+    <script>
+        // ==================== Image Collections ====================
+        const decorImages = {
+            portrait: Array.from({length: 20}, (_, i) => `images/portrait-${String(i+1).padStart(2, '0')}.jpg`),
+            aiart: Array.from({length: 82}, (_, i) => `images/aiart-${String(i+1).padStart(2, '0')}.jpg`),
+            era: [
+                'images/era-1950s-01.jpg', 'images/era-1960s-01.jpg', 'images/era-1970s-01.jpg',
+                'images/era-1980s-01.jpg', 'images/era-1990s-01.jpg', 'images/era-2000s-01.jpg',
+                'images/era-2010s-01.jpg', 'images/era-2020s-01.jpg'
+            ]
+        };
+
+        function getRandomImages(count = 5) {
+            const all = [...decorImages.portrait, ...decorImages.aiart.slice(0, 30)];
+            return all.sort(() => Math.random() - 0.5).slice(0, count);
         }
 
-        // Chapter data
+        // ==================== Settings Management ====================
+        const defaultSettings = {
+            font: "'Noto Serif SC', Georgia, serif",
+            fontSize: 1.05,
+            lineHeight: 2,
+            contentWidth: 720,
+            theme: 'classic'
+        };
+
+        let currentSettings = { ...defaultSettings };
+
+        function loadSettings() {
+            try {
+                const saved = localStorage.getItem('readerSettings');
+                if (saved) {
+                    currentSettings = { ...defaultSettings, ...JSON.parse(saved) };
+                }
+            } catch (e) {
+                console.error('Failed to load settings:', e);
+            }
+            applySettings();
+            updateSettingsUI();
+        }
+
+        function saveSettings() {
+            try {
+                localStorage.setItem('readerSettings', JSON.stringify(currentSettings));
+            } catch (e) {
+                console.error('Failed to save settings:', e);
+            }
+        }
+
+        function applySettings() {
+            const root = document.documentElement;
+            root.style.setProperty('--reader-font', currentSettings.font);
+            root.style.setProperty('--reader-font-size', currentSettings.fontSize + 'rem');
+            root.style.setProperty('--reader-line-height', currentSettings.lineHeight);
+            root.style.setProperty('--content-max-width', currentSettings.contentWidth + 'px');
+            document.body.dataset.theme = currentSettings.theme;
+        }
+
+        function updateSettingsUI() {
+            // Font select
+            document.getElementById('fontSelect').value = currentSettings.font;
+
+            // Size slider
+            document.getElementById('sizeSlider').value = currentSettings.fontSize;
+
+            // Line height buttons
+            document.querySelectorAll('#lineHeightGroup .radio-btn').forEach(btn => {
+                btn.classList.toggle('active', parseFloat(btn.dataset.value) === currentSettings.lineHeight);
+            });
+
+            // Width buttons
+            document.querySelectorAll('#widthGroup .radio-btn').forEach(btn => {
+                btn.classList.toggle('active', parseInt(btn.dataset.value) === currentSettings.contentWidth);
+            });
+
+            // Theme buttons
+            document.querySelectorAll('.theme-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.theme === currentSettings.theme);
+            });
+        }
+
+        function updateFont(value) {
+            currentSettings.font = value;
+            applySettings();
+            saveSettings();
+        }
+
+        function updateFontSize(value) {
+            currentSettings.fontSize = parseFloat(value);
+            applySettings();
+            saveSettings();
+        }
+
+        function updateLineHeight(value) {
+            currentSettings.lineHeight = value;
+            document.querySelectorAll('#lineHeightGroup .radio-btn').forEach(btn => {
+                btn.classList.toggle('active', parseFloat(btn.dataset.value) === value);
+            });
+            applySettings();
+            saveSettings();
+        }
+
+        function updateWidth(value) {
+            currentSettings.contentWidth = value;
+            document.querySelectorAll('#widthGroup .radio-btn').forEach(btn => {
+                btn.classList.toggle('active', parseInt(btn.dataset.value) === value);
+            });
+            applySettings();
+            saveSettings();
+        }
+
+        function updateTheme(value) {
+            currentSettings.theme = value;
+            document.querySelectorAll('.theme-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.theme === value);
+            });
+            applySettings();
+            saveSettings();
+        }
+
+        function resetSettings() {
+            currentSettings = { ...defaultSettings };
+            applySettings();
+            updateSettingsUI();
+            saveSettings();
+        }
+
+        function openSettings() {
+            document.getElementById('settingsOverlay').classList.add('active');
+            document.getElementById('settingsPanel').classList.add('active');
+        }
+
+        function closeSettings() {
+            document.getElementById('settingsOverlay').classList.remove('active');
+            document.getElementById('settingsPanel').classList.remove('active');
+        }
+
+        // ==================== Chapter Data ====================
         const chapters = [
             { number: '序', title: '美丽的心灵地图', subtitle: '三个女人的美丽困惑与时代背景', file: '10-preface.md', readTime: '25分钟', wordCount: '1.5万字' },
             { number: '1', title: '我们为什么想变美？', subtitle: '看见内心真实的渴望', file: '02-motivation.md', readTime: '20分钟', wordCount: '2.5万字' },
@@ -799,23 +1708,46 @@
             { number: '附录', title: '心理学效应速查表', subtitle: '50+常见心理学效应解析', file: '12-psychology-effects-list.md', readTime: '15分钟', wordCount: '1万字' }
         ];
 
-        // Get file from URL
+        // ==================== Utility Functions ====================
         function getFileParam() {
             const params = new URLSearchParams(window.location.search);
             return params.get('file');
         }
 
-        // Find chapter info
         function getChapterInfo(filename) {
             return chapters.find(c => c.file === filename);
         }
 
-        // Find chapter index
         function getChapterIndex(filename) {
             return chapters.findIndex(c => c.file === filename);
         }
 
-        // Generate TOC from headings
+        // ==================== Reading Position ====================
+        function saveReadingPosition() {
+            const file = getFileParam();
+            if (!file) return;
+
+            const scrollTop = window.scrollY;
+            const positions = JSON.parse(localStorage.getItem('readingPositions') || '{}');
+            positions[file] = scrollTop;
+            localStorage.setItem('readingPositions', JSON.stringify(positions));
+        }
+
+        function restoreReadingPosition() {
+            const file = getFileParam();
+            if (!file) return;
+
+            const positions = JSON.parse(localStorage.getItem('readingPositions') || '{}');
+            const savedPosition = positions[file];
+
+            if (savedPosition && savedPosition > 100) {
+                setTimeout(() => {
+                    window.scrollTo({ top: savedPosition, behavior: 'smooth' });
+                }, 300);
+            }
+        }
+
+        // ==================== TOC Functions ====================
         function generateToc(container) {
             const headings = container.querySelectorAll('h1, h2, h3');
             const tocList = document.getElementById('tocList');
@@ -846,17 +1778,14 @@
                     const target = document.getElementById(targetId);
                     if (target) {
                         target.scrollIntoView({ behavior: 'smooth' });
-                        // Close mobile TOC
                         document.getElementById('tocSidebar').classList.remove('active');
                     }
                 });
             });
 
-            // Highlight current section on scroll
             observeHeadings(headings);
         }
 
-        // Observe headings for active state
         function observeHeadings(headings) {
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
@@ -872,12 +1801,11 @@
             headings.forEach(heading => observer.observe(heading));
         }
 
-        // Toggle mobile TOC
         function toggleToc() {
             document.getElementById('tocSidebar').classList.toggle('active');
         }
 
-        // Create chapter navigation
+        // ==================== Chapter Navigation ====================
         function createChapterNav(currentIndex) {
             let navHtml = '<nav class="chapter-nav">';
 
@@ -905,15 +1833,99 @@
             return navHtml;
         }
 
-        // Update progress bar on scroll
-        function updateProgress() {
-            const scrollTop = window.scrollY;
-            const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-            const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
-            document.getElementById('progressBar').style.width = progress + '%';
+        function navigateChapter(direction) {
+            const file = getFileParam();
+            const currentIndex = getChapterIndex(file);
+
+            if (direction === 'prev' && currentIndex > 0) {
+                window.location.href = `reader.html?file=${chapters[currentIndex - 1].file}`;
+            } else if (direction === 'next' && currentIndex < chapters.length - 1) {
+                window.location.href = `reader.html?file=${chapters[currentIndex + 1].file}`;
+            }
         }
 
-        // Load and render markdown
+        // ==================== Progress Tracking ====================
+        let ticking = false;
+
+        function updateProgress() {
+            if (!ticking) {
+                requestAnimationFrame(() => {
+                    const scrollTop = window.scrollY;
+                    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+                    const progress = docHeight > 0 ? Math.min((scrollTop / docHeight) * 100, 100) : 0;
+
+                    document.getElementById('progressBar').style.width = progress + '%';
+                    document.getElementById('progressText').textContent = Math.round(progress) + '%';
+
+                    // Back to top button visibility
+                    const backToTop = document.getElementById('backToTop');
+                    backToTop.classList.toggle('visible', scrollTop > 500);
+
+                    ticking = false;
+                });
+                ticking = true;
+            }
+        }
+
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // ==================== Image Lightbox ====================
+        function openLightbox(src) {
+            const lightbox = document.getElementById('lightbox');
+            const lightboxImg = document.getElementById('lightboxImg');
+            lightboxImg.src = src;
+            lightbox.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeLightbox() {
+            document.getElementById('lightbox').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        function setupImageLightbox() {
+            document.querySelectorAll('.markdown-body img').forEach(img => {
+                img.addEventListener('click', () => openLightbox(img.src));
+            });
+        }
+
+        // ==================== Keyboard Shortcuts ====================
+        function setupKeyboardShortcuts() {
+            document.addEventListener('keydown', (e) => {
+                // Ignore if typing in an input
+                if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+
+                switch(e.key) {
+                    case 'ArrowLeft':
+                        navigateChapter('prev');
+                        break;
+                    case 'ArrowRight':
+                        navigateChapter('next');
+                        break;
+                    case 't':
+                    case 'T':
+                        toggleToc();
+                        break;
+                    case 's':
+                    case 'S':
+                        if (!document.getElementById('settingsPanel').classList.contains('active')) {
+                            openSettings();
+                        } else {
+                            closeSettings();
+                        }
+                        break;
+                    case 'Escape':
+                        closeSettings();
+                        closeLightbox();
+                        document.getElementById('tocSidebar').classList.remove('active');
+                        break;
+                }
+            });
+        }
+
+        // ==================== Load Article ====================
         async function loadArticle() {
             const file = getFileParam();
 
@@ -924,6 +1936,7 @@
 
             const chapter = getChapterInfo(file);
             const chapterIndex = getChapterIndex(file);
+            const randomImages = getRandomImages(5);
 
             try {
                 const response = await fetch(file);
@@ -939,45 +1952,50 @@
 
                 // Render article
                 const article = document.getElementById('article');
-                const shuffled = decorImages.sort(() => Math.random() - 0.5);
 
                 if (chapter) {
                     document.title = `${chapter.title} | 美丽的心灵地图`;
                     document.getElementById('headerTitle').textContent = chapter.title;
 
                     article.innerHTML = `
-                        <header class="article-header">
-                            <img src="${shuffled[1]}" alt="" class="article-decor" id="articleDecorImg">
-                            <span class="article-chapter">第${chapter.number}章</span>
-                            <h1 class="article-title">${chapter.title}</h1>
-                            <p class="article-subtitle">${chapter.subtitle}</p>
-                            <div class="article-meta">
-                                <span><span class="material-symbols-outlined">schedule</span>${chapter.readTime}</span>
-                                <span><span class="material-symbols-outlined">article</span>${chapter.wordCount}</span>
+                        <div class="article-hero" style="background-image: url('${randomImages[0]}')">
+                            <div class="article-hero-content">
+                                <span class="article-chapter">第${chapter.number}章</span>
+                                <h1 class="article-title">${chapter.title}</h1>
+                                <p class="article-subtitle">${chapter.subtitle}</p>
+                                <div class="article-meta">
+                                    <span><span class="material-symbols-outlined">schedule</span>${chapter.readTime}</span>
+                                    <span><span class="material-symbols-outlined">article</span>${chapter.wordCount}</span>
+                                </div>
                             </div>
-                        </header>
+                        </div>
                         <div class="markdown-body" id="markdownBody">${marked.parse(markdown)}</div>
                         ${createChapterNav(chapterIndex)}
                     `;
                 } else {
-                    // Generic markdown file
                     document.title = `阅读 | 美丽的心灵地图`;
                     document.getElementById('headerTitle').textContent = file;
                     article.innerHTML = `<div class="markdown-body" id="markdownBody">${marked.parse(markdown)}</div>`;
                 }
 
+                // Set decoration images
+                document.getElementById('tocDecorImg').src = randomImages[1];
+                document.getElementById('floatingDecor').src = randomImages[2];
+
                 // Generate TOC
                 generateToc(document.getElementById('markdownBody'));
 
-                // Scroll to top
-                window.scrollTo(0, 0);
+                // Setup image lightbox
+                setupImageLightbox();
+
+                // Restore reading position
+                restoreReadingPosition();
 
             } catch (error) {
                 showError('加载失败', '无法加载文章内容，请检查文件是否存在');
             }
         }
 
-        // Show error
         function showError(title, message) {
             document.getElementById('article').innerHTML = `
                 <div class="error">
@@ -993,11 +2011,17 @@
             `;
         }
 
-        // Event listeners
+        // ==================== Event Listeners ====================
         window.addEventListener('scroll', updateProgress);
+        window.addEventListener('scroll', () => {
+            // Debounced save of reading position
+            clearTimeout(window.savePositionTimeout);
+            window.savePositionTimeout = setTimeout(saveReadingPosition, 500);
+        });
 
-        // Initialize
-        setRandomDecorImages();
+        // ==================== Initialize ====================
+        loadSettings();
+        setupKeyboardShortcuts();
         loadArticle();
     </script>
 </body>

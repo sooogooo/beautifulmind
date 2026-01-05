@@ -571,7 +571,7 @@
             transform: translateY(-50%);
             width: 400px;
             height: 400px;
-            background: url('images/aiart-28.jpg') center/cover;
+            background: var(--features-bg-image) center/cover;
             border-radius: 50%;
             opacity: 0.06;
             pointer-events: none;
@@ -981,8 +981,8 @@
 
     <!-- Hero Section -->
     <section class="hero">
-        <img src="images/portrait-01.jpg" alt="" class="hero-image hero-image-1" loading="lazy" decoding="async">
-        <img src="images/portrait-03.jpg" alt="" class="hero-image hero-image-2" loading="lazy" decoding="async">
+        <img src="" alt="" class="hero-image hero-image-1" loading="lazy" decoding="async" id="heroImg1">
+        <img src="" alt="" class="hero-image hero-image-2" loading="lazy" decoding="async" id="heroImg2">
         <div class="container">
             <div class="hero-content">
                 <div class="hero-badge">
@@ -1197,6 +1197,34 @@
     </div>
 
     <script>
+        // Random Hero Images
+        const heroImages = [
+            'images/portrait-01.jpg', 'images/portrait-02.jpg', 'images/portrait-03.jpg',
+            'images/portrait-04.jpg', 'images/portrait-05.jpg', 'images/portrait-06.jpg',
+            'images/portrait-07.jpg', 'images/portrait-08.jpg', 'images/portrait-09.jpg',
+            'images/portrait-10.jpg', 'images/portrait-11.jpg', 'images/portrait-12.jpg',
+            'images/portrait-13.jpg', 'images/portrait-14.jpg', 'images/portrait-15.jpg',
+            'images/portrait-16.jpg', 'images/portrait-17.jpg', 'images/portrait-18.jpg',
+            'images/era-2020s-01.jpg', 'images/era-2020s-02.jpg', 'images/era-2020s-03.jpg',
+            'images/era-2010s-01.jpg', 'images/era-2010s-02.jpg', 'images/era-2000s-01.jpg',
+            'images/aiart-17.jpg', 'images/aiart-28.jpg', 'images/aiart-39.jpg'
+        ];
+
+        function setRandomHeroImages() {
+            const shuffled = heroImages.sort(() => Math.random() - 0.5);
+            document.getElementById('heroImg1').src = shuffled[0];
+            document.getElementById('heroImg2').src = shuffled[1];
+
+            // Random background for features section
+            const bgImages = [
+                'images/aiart-17.jpg', 'images/aiart-28.jpg', 'images/aiart-39.jpg',
+                'images/aiart-51.jpg', 'images/aiart-59.jpg', 'images/aiart-72.jpg'
+            ];
+            const randomBg = bgImages[Math.floor(Math.random() * bgImages.length)];
+            document.documentElement.style.setProperty('--features-bg-image', `url('${randomBg}')`);
+        }
+        setRandomHeroImages();
+
         // Chapters Data
         const chapters = [
             {

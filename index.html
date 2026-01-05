@@ -1,0 +1,1336 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <!-- SEO Meta Tags -->
+    <title>美丽的心灵地图 | 医美消费心理学指南 | 重庆联合丽格</title>
+    <meta name="description" content="《美丽的心灵地图》是一本关于医美消费心理学的专业指南。从心理学视角解读变美动机、决策过程、营销识别，帮助您做出理性的美丽选择，实现内外和谐。">
+    <meta name="keywords" content="医美心理学,美丽心理,变美动机,医美决策,美丽焦虑,自我认知,心理健康,消费心理学,理性变美">
+    <meta name="author" content="重庆联合丽格科技有限公司">
+    <meta name="robots" content="index, follow">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="美丽的心灵地图 | 医美消费心理学指南">
+    <meta property="og:description" content="从心理学视角解读医美消费，帮助您做出理性的美丽选择。">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="zh_CN">
+    <meta property="og:site_name" content="美丽的心灵地图">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="https://docs.bccsw.cn/favicon.png">
+    <link rel="apple-touch-icon" href="https://docs.bccsw.cn/logo.png">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+
+    <!-- Material Symbols -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap">
+
+    <!-- Marked.js for Markdown -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+    <style>
+        /* ==================== CSS Variables ==================== */
+        :root {
+            /* Color Palette - Neutral Elegance */
+            --color-bg: #FAFAF9;
+            --color-bg-alt: #F5F5F4;
+            --color-surface: #FFFFFF;
+            --color-text: #3D3D3D;
+            --color-text-light: #737373;
+            --color-text-muted: #A3A3A3;
+            --color-border: #E5E5E5;
+            --color-border-light: #F0F0F0;
+
+            /* Accent Colors - Psychology Theme */
+            --color-primary: #9B8AA6;      /* Lavender taupe */
+            --color-primary-light: #C9BED4;
+            --color-accent: #E8B4B8;       /* Rose gold */
+            --color-accent-soft: #D4E6E1;  /* Mint */
+            --color-accent-warm: #F5E6D3;  /* Warm cream */
+
+            /* Typography */
+            --font-sans: 'Noto Sans SC', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-weight-light: 300;
+            --font-weight-regular: 400;
+            --font-weight-medium: 500;
+
+            /* Spacing */
+            --spacing-xs: 0.5rem;
+            --spacing-sm: 1rem;
+            --spacing-md: 1.5rem;
+            --spacing-lg: 2rem;
+            --spacing-xl: 3rem;
+            --spacing-2xl: 5rem;
+
+            /* Line & Letter Spacing */
+            --letter-spacing: 0.05em;
+            --letter-spacing-wide: 0.1em;
+            --line-height: 1.8;
+            --line-height-tight: 1.4;
+
+            /* Border */
+            --border-thin: 1px solid var(--color-border);
+            --border-light: 1px solid var(--color-border-light);
+
+            /* Transitions */
+            --transition-fast: 0.15s ease;
+            --transition-normal: 0.3s ease;
+        }
+
+        /* ==================== Reset & Base ==================== */
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            font-size: 16px;
+            scroll-behavior: smooth;
+            -webkit-text-size-adjust: 100%;
+        }
+
+        body {
+            font-family: var(--font-sans);
+            font-weight: var(--font-weight-light);
+            color: var(--color-text);
+            background-color: var(--color-bg);
+            line-height: var(--line-height);
+            letter-spacing: var(--letter-spacing);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* ==================== Typography ==================== */
+        h1, h2, h3, h4, h5, h6 {
+            font-weight: var(--font-weight-light);
+            line-height: var(--line-height-tight);
+            letter-spacing: var(--letter-spacing-wide);
+        }
+
+        h1 { font-size: clamp(1.75rem, 5vw, 2.5rem); }
+        h2 { font-size: clamp(1.25rem, 3vw, 1.75rem); }
+        h3 { font-size: clamp(1.1rem, 2.5vw, 1.25rem); }
+
+        p {
+            margin-bottom: var(--spacing-sm);
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+            transition: color var(--transition-fast);
+        }
+
+        /* ==================== Layout ==================== */
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 var(--spacing-md);
+        }
+
+        /* ==================== Header ==================== */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(250, 250, 249, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: var(--border-light);
+        }
+
+        .header-inner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 60px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+        }
+
+        .logo img {
+            height: 32px;
+            width: auto;
+        }
+
+        .logo-text {
+            font-size: 0.9rem;
+            font-weight: var(--font-weight-regular);
+            letter-spacing: var(--letter-spacing-wide);
+            color: var(--color-text-light);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: var(--spacing-lg);
+        }
+
+        .nav-link {
+            font-size: 0.875rem;
+            color: var(--color-text-light);
+            padding: var(--spacing-xs) 0;
+            position: relative;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: var(--color-primary);
+            transition: width var(--transition-normal);
+        }
+
+        .nav-link:hover::after,
+        .nav-link.active::after {
+            width: 100%;
+        }
+
+        /* Mobile Menu Button */
+        .menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: var(--spacing-xs);
+        }
+
+        .menu-btn .material-symbols-outlined {
+            font-size: 24px;
+            color: var(--color-text);
+        }
+
+        /* ==================== Hero Section ==================== */
+        .hero {
+            min-height: 80vh;
+            display: flex;
+            align-items: center;
+            padding-top: 100px;
+            padding-bottom: var(--spacing-2xl);
+            background: linear-gradient(180deg, var(--color-bg) 0%, var(--color-accent-warm) 100%);
+        }
+
+        .hero-content {
+            text-align: center;
+            max-width: 750px;
+            margin: 0 auto;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--spacing-xs);
+            padding: var(--spacing-xs) var(--spacing-md);
+            border: var(--border-thin);
+            border-radius: 100px;
+            font-size: 0.75rem;
+            color: var(--color-text-light);
+            margin-bottom: var(--spacing-lg);
+            background: var(--color-surface);
+        }
+
+        .hero-title {
+            margin-bottom: var(--spacing-sm);
+            color: var(--color-text);
+        }
+
+        .hero-title-sub {
+            font-size: 1.1rem;
+            font-weight: var(--font-weight-light);
+            color: var(--color-primary);
+            margin-bottom: var(--spacing-md);
+            letter-spacing: var(--letter-spacing-wide);
+        }
+
+        .hero-subtitle {
+            font-size: 1.05rem;
+            color: var(--color-text-light);
+            margin-bottom: var(--spacing-xl);
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hero-quote {
+            font-style: italic;
+            color: var(--color-text-muted);
+            font-size: 0.95rem;
+            margin-bottom: var(--spacing-xl);
+            padding: var(--spacing-md);
+            border-left: 2px solid var(--color-primary);
+            text-align: left;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+            background: rgba(255,255,255,0.5);
+        }
+
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: var(--spacing-xl);
+            padding-top: var(--spacing-lg);
+            border-top: var(--border-light);
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 1.75rem;
+            font-weight: var(--font-weight-regular);
+            color: var(--color-primary);
+            margin-bottom: var(--spacing-xs);
+        }
+
+        .stat-label {
+            font-size: 0.75rem;
+            color: var(--color-text-muted);
+            text-transform: uppercase;
+            letter-spacing: var(--letter-spacing-wide);
+        }
+
+        /* ==================== Introduction Section ==================== */
+        .intro-section {
+            padding: var(--spacing-2xl) 0;
+            background: var(--color-surface);
+        }
+
+        .intro-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: var(--spacing-lg);
+        }
+
+        .intro-card {
+            text-align: center;
+            padding: var(--spacing-lg);
+        }
+
+        .intro-icon {
+            width: 60px;
+            height: 60px;
+            margin: 0 auto var(--spacing-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: var(--color-bg-alt);
+        }
+
+        .intro-icon .material-symbols-outlined {
+            font-size: 28px;
+            color: var(--color-primary);
+        }
+
+        .intro-card h3 {
+            margin-bottom: var(--spacing-sm);
+            font-weight: var(--font-weight-regular);
+        }
+
+        .intro-card p {
+            color: var(--color-text-light);
+            font-size: 0.9rem;
+        }
+
+        /* ==================== Chapters Section ==================== */
+        .chapters {
+            padding: var(--spacing-2xl) 0;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: var(--spacing-xl);
+        }
+
+        .section-title {
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .section-desc {
+            color: var(--color-text-light);
+            font-size: 0.95rem;
+        }
+
+        /* Chapter tabs */
+        .chapter-tabs {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: var(--spacing-sm);
+            margin-bottom: var(--spacing-xl);
+        }
+
+        .chapter-tab {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--spacing-xs);
+            padding: var(--spacing-xs) var(--spacing-md);
+            border: var(--border-thin);
+            border-radius: 100px;
+            font-size: 0.875rem;
+            color: var(--color-text-light);
+            background: transparent;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+        }
+
+        .chapter-tab:hover,
+        .chapter-tab.active {
+            border-color: var(--color-primary);
+            color: var(--color-text);
+        }
+
+        .chapter-tab.active {
+            background: var(--color-primary-light);
+        }
+
+        .chapter-tab .material-symbols-outlined {
+            font-size: 18px;
+        }
+
+        /* ==================== Chapters Grid ==================== */
+        .chapters-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: var(--spacing-md);
+        }
+
+        .chapter-card {
+            background: var(--color-surface);
+            border: var(--border-light);
+            border-radius: 12px;
+            padding: var(--spacing-lg);
+            cursor: pointer;
+            transition: all var(--transition-normal);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chapter-card:hover {
+            border-color: var(--color-primary);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.05);
+        }
+
+        .chapter-header {
+            display: flex;
+            align-items: flex-start;
+            gap: var(--spacing-sm);
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .chapter-number {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--color-bg-alt);
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: var(--font-weight-medium);
+            color: var(--color-primary);
+            flex-shrink: 0;
+        }
+
+        .chapter-card h3 {
+            font-size: 1rem;
+            font-weight: var(--font-weight-regular);
+            flex: 1;
+        }
+
+        .chapter-subtitle {
+            font-size: 0.85rem;
+            color: var(--color-text-light);
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .chapter-keywords {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--spacing-xs);
+            margin-top: auto;
+            padding-top: var(--spacing-sm);
+        }
+
+        .keyword {
+            font-size: 0.7rem;
+            padding: 2px 8px;
+            background: var(--color-bg-alt);
+            border-radius: 4px;
+            color: var(--color-text-muted);
+        }
+
+        .chapter-meta {
+            font-size: 0.75rem;
+            color: var(--color-text-muted);
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+            margin-top: var(--spacing-sm);
+            padding-top: var(--spacing-sm);
+            border-top: var(--border-light);
+        }
+
+        .chapter-meta span {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .chapter-meta .material-symbols-outlined {
+            font-size: 14px;
+        }
+
+        /* ==================== Features Section ==================== */
+        .features {
+            padding: var(--spacing-2xl) 0;
+            background: var(--color-surface);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: var(--spacing-lg);
+        }
+
+        .feature-card {
+            padding: var(--spacing-lg);
+            border: var(--border-light);
+            border-radius: 12px;
+            background: var(--color-bg);
+        }
+
+        .feature-card h3 {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+            margin-bottom: var(--spacing-sm);
+            font-weight: var(--font-weight-regular);
+        }
+
+        .feature-card h3 .material-symbols-outlined {
+            color: var(--color-primary);
+        }
+
+        .feature-card p {
+            color: var(--color-text-light);
+            font-size: 0.9rem;
+        }
+
+        .feature-list {
+            margin-top: var(--spacing-sm);
+            padding-left: var(--spacing-md);
+        }
+
+        .feature-list li {
+            color: var(--color-text-light);
+            font-size: 0.85rem;
+            margin-bottom: var(--spacing-xs);
+        }
+
+        /* ==================== Article Reader ==================== */
+        .reader-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.3);
+            z-index: 2000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all var(--transition-normal);
+        }
+
+        .reader-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .reader {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 100%;
+            max-width: 720px;
+            height: 100%;
+            background: var(--color-surface);
+            z-index: 2001;
+            overflow-y: auto;
+            transition: right var(--transition-normal);
+        }
+
+        .reader.active {
+            right: 0;
+        }
+
+        .reader-header {
+            position: sticky;
+            top: 0;
+            background: var(--color-surface);
+            padding: var(--spacing-md);
+            border-bottom: var(--border-light);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            z-index: 10;
+        }
+
+        .reader-close {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: var(--spacing-xs);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .reader-close .material-symbols-outlined {
+            font-size: 24px;
+            color: var(--color-text-light);
+        }
+
+        .reader-title {
+            font-size: 0.9rem;
+            font-weight: var(--font-weight-regular);
+            color: var(--color-text);
+            flex: 1;
+            text-align: center;
+            padding: 0 var(--spacing-sm);
+        }
+
+        .reader-content {
+            padding: var(--spacing-lg) var(--spacing-md) var(--spacing-2xl);
+        }
+
+        /* ==================== Markdown Styles ==================== */
+        .markdown-body {
+            font-size: 1rem;
+            line-height: var(--line-height);
+            color: var(--color-text);
+        }
+
+        .markdown-body h1 {
+            font-size: 1.75rem;
+            margin: var(--spacing-xl) 0 var(--spacing-md);
+            padding-bottom: var(--spacing-sm);
+            border-bottom: var(--border-light);
+        }
+
+        .markdown-body h2 {
+            font-size: 1.35rem;
+            margin: var(--spacing-lg) 0 var(--spacing-md);
+            color: var(--color-text);
+        }
+
+        .markdown-body h3 {
+            font-size: 1.15rem;
+            margin: var(--spacing-md) 0 var(--spacing-sm);
+        }
+
+        .markdown-body h4 {
+            font-size: 1rem;
+            margin: var(--spacing-md) 0 var(--spacing-sm);
+            font-weight: var(--font-weight-regular);
+        }
+
+        .markdown-body p {
+            margin-bottom: var(--spacing-md);
+        }
+
+        .markdown-body ul, .markdown-body ol {
+            margin-bottom: var(--spacing-md);
+            padding-left: var(--spacing-lg);
+        }
+
+        .markdown-body li {
+            margin-bottom: var(--spacing-xs);
+        }
+
+        .markdown-body strong {
+            font-weight: var(--font-weight-medium);
+            color: var(--color-text);
+        }
+
+        .markdown-body blockquote {
+            margin: var(--spacing-md) 0;
+            padding: var(--spacing-sm) var(--spacing-md);
+            border-left: 2px solid var(--color-primary);
+            background: var(--color-bg-alt);
+            color: var(--color-text-light);
+            font-style: italic;
+        }
+
+        .markdown-body hr {
+            border: none;
+            border-top: var(--border-light);
+            margin: var(--spacing-xl) 0;
+        }
+
+        .markdown-body a {
+            color: var(--color-primary);
+            border-bottom: 1px solid var(--color-primary-light);
+        }
+
+        .markdown-body a:hover {
+            border-bottom-color: var(--color-primary);
+        }
+
+        /* ==================== Footer ==================== */
+        .footer {
+            border-top: var(--border-thin);
+            padding: var(--spacing-xl) 0 var(--spacing-lg);
+            margin-top: var(--spacing-2xl);
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: var(--spacing-lg);
+            text-align: center;
+        }
+
+        .footer-brand img {
+            height: 40px;
+            margin-bottom: var(--spacing-sm);
+            opacity: 0.7;
+        }
+
+        .footer-brand p {
+            font-size: 0.875rem;
+            color: var(--color-text-light);
+            max-width: 300px;
+            margin: 0 auto;
+        }
+
+        .footer-contact {
+            font-size: 0.875rem;
+            color: var(--color-text-light);
+        }
+
+        .footer-contact p {
+            margin-bottom: var(--spacing-xs);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--spacing-xs);
+        }
+
+        .footer-contact .material-symbols-outlined {
+            font-size: 16px;
+            color: var(--color-text-muted);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: var(--spacing-lg);
+            margin-top: var(--spacing-lg);
+            border-top: var(--border-light);
+            font-size: 0.75rem;
+            color: var(--color-text-muted);
+        }
+
+        .footer-bottom a {
+            color: var(--color-text-light);
+        }
+
+        .footer-bottom a:hover {
+            color: var(--color-text);
+        }
+
+        /* ==================== Loading State ==================== */
+        .loading {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: var(--spacing-2xl);
+            color: var(--color-text-muted);
+        }
+
+        .loading-spinner {
+            width: 24px;
+            height: 24px;
+            border: 2px solid var(--color-border);
+            border-top-color: var(--color-primary);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin-bottom: var(--spacing-sm);
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* ==================== Mobile Styles ==================== */
+        @media (max-width: 768px) {
+            :root {
+                --spacing-md: 1rem;
+                --spacing-lg: 1.5rem;
+                --spacing-xl: 2rem;
+                --spacing-2xl: 3rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .menu-btn {
+                display: block;
+            }
+
+            .hero {
+                min-height: 70vh;
+                padding-top: 80px;
+            }
+
+            .hero-stats {
+                flex-direction: column;
+                gap: var(--spacing-md);
+            }
+
+            .intro-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .chapters-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .reader {
+                max-width: 100%;
+            }
+
+            .footer-content {
+                gap: var(--spacing-md);
+            }
+
+            .chapter-tabs {
+                justify-content: flex-start;
+                overflow-x: auto;
+                flex-wrap: nowrap;
+                padding-bottom: var(--spacing-xs);
+                -webkit-overflow-scrolling: touch;
+            }
+
+            .chapter-tab {
+                flex-shrink: 0;
+            }
+        }
+
+        /* ==================== Mobile Menu ==================== */
+        .mobile-menu {
+            position: fixed;
+            top: 60px;
+            left: 0;
+            right: 0;
+            background: var(--color-surface);
+            border-bottom: var(--border-thin);
+            padding: var(--spacing-md);
+            z-index: 999;
+            transform: translateY(-100%);
+            opacity: 0;
+            visibility: hidden;
+            transition: all var(--transition-normal);
+        }
+
+        .mobile-menu.active {
+            transform: translateY(0);
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .mobile-menu .nav-link {
+            display: block;
+            padding: var(--spacing-sm) 0;
+            border-bottom: var(--border-light);
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container header-inner">
+            <a href="#" class="logo" onclick="closeReader(); return false;">
+                <img src="https://docs.bccsw.cn/logo.png" alt="Logo">
+                <span class="logo-text">美丽的心灵地图</span>
+            </a>
+            <nav class="nav-links">
+                <a href="#chapters" class="nav-link active">章节目录</a>
+                <a href="#features" class="nav-link">本书特色</a>
+                <a href="#about" class="nav-link">关于</a>
+                <a href="#contact" class="nav-link">联系</a>
+            </nav>
+            <button class="menu-btn" onclick="toggleMobileMenu()" aria-label="菜单">
+                <span class="material-symbols-outlined">menu</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Mobile Menu -->
+    <nav class="mobile-menu" id="mobileMenu">
+        <a href="#chapters" class="nav-link" onclick="closeMobileMenu()">章节目录</a>
+        <a href="#features" class="nav-link" onclick="closeMobileMenu()">本书特色</a>
+        <a href="#about" class="nav-link" onclick="closeMobileMenu()">关于</a>
+        <a href="#contact" class="nav-link" onclick="closeMobileMenu()">联系</a>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-badge">
+                    <span class="material-symbols-outlined">psychology</span>
+                    医美消费心理学专著
+                </div>
+                <h1 class="hero-title">美丽的心灵地图</h1>
+                <p class="hero-title-sub">医美消费心理学 · 理性变美指南</p>
+                <p class="hero-subtitle">
+                    医美是工具，不是魔法。聪明地变美，比一味地变美更重要。<br>
+                    从心理学视角解读变美动机，帮助您做出理性的美丽选择。
+                </p>
+                <blockquote class="hero-quote">
+                    "我们不是因为看到了真实，才产生了行为；我们是先有了行为的冲动，然后才为这个冲动寻找理由。"<br>
+                    <span style="display: block; text-align: right; margin-top: 0.5rem; font-style: normal;">——丹尼尔·卡纳曼</span>
+                </blockquote>
+                <div class="hero-stats">
+                    <div class="stat-item">
+                        <div class="stat-number">10</div>
+                        <div class="stat-label">核心章节</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">20万+</div>
+                        <div class="stat-label">专业字数</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">60+</div>
+                        <div class="stat-label">实用工具</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Introduction Section -->
+    <section class="intro-section">
+        <div class="container">
+            <div class="intro-grid">
+                <div class="intro-card">
+                    <div class="intro-icon">
+                        <span class="material-symbols-outlined">balance</span>
+                    </div>
+                    <h3>中立赋能</h3>
+                    <p>不评判、不推销、不限制，提供科学的分析框架，帮助您自主做出明智决策</p>
+                </div>
+                <div class="intro-card">
+                    <div class="intro-icon">
+                        <span class="material-symbols-outlined">neurology</span>
+                    </div>
+                    <h3>心理学视角</h3>
+                    <p>融合认知心理学、积极心理学、社会心理学，从内在机制理解变美动机</p>
+                </div>
+                <div class="intro-card">
+                    <div class="intro-icon">
+                        <span class="material-symbols-outlined">handyman</span>
+                    </div>
+                    <h3>实用工具</h3>
+                    <p>60+个评估表、清单和指南，可直接应用于自我认知和决策过程</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Chapters Section -->
+    <section class="chapters" id="chapters">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">章节目录</h2>
+                <p class="section-desc">从动机探索到幸福实现的完整心理学旅程</p>
+            </div>
+
+            <div class="chapter-tabs">
+                <button class="chapter-tab active" data-category="all" onclick="filterChapters('all')">
+                    <span class="material-symbols-outlined">grid_view</span>
+                    全部
+                </button>
+                <button class="chapter-tab" data-category="popular" onclick="filterChapters('popular')">
+                    <span class="material-symbols-outlined">menu_book</span>
+                    大众科普
+                </button>
+                <button class="chapter-tab" data-category="psychology" onclick="filterChapters('psychology')">
+                    <span class="material-symbols-outlined">psychology</span>
+                    心理学理论
+                </button>
+                <button class="chapter-tab" data-category="positive" onclick="filterChapters('positive')">
+                    <span class="material-symbols-outlined">sentiment_satisfied</span>
+                    积极心理学
+                </button>
+            </div>
+
+            <div class="chapters-grid" id="chaptersGrid">
+                <!-- Chapters will be dynamically inserted here -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">本书特色</h2>
+                <p class="section-desc">原创理论体系与实用工具的完美结合</p>
+            </div>
+
+            <div class="features-grid">
+                <div class="feature-card">
+                    <h3>
+                        <span class="material-symbols-outlined">hub</span>
+                        三个自我协作模型
+                    </h3>
+                    <p>原创心理学模型，帮助理解内在决策机制</p>
+                    <ul class="feature-list">
+                        <li><strong>镜像自我</strong>：他人眼中的形象投射</li>
+                        <li><strong>地图自我</strong>：理性分析和规划能力</li>
+                        <li><strong>定锚自我</strong>：内在价值和核心自信</li>
+                    </ul>
+                </div>
+                <div class="feature-card">
+                    <h3>
+                        <span class="material-symbols-outlined">tune</span>
+                        美丽杠杆类型学
+                    </h3>
+                    <p>基于动机心理学的分类系统</p>
+                    <ul class="feature-list">
+                        <li><strong>补偿型杠杆</strong>：弥补感知不足</li>
+                        <li><strong>增益型杠杆</strong>：优化提升</li>
+                        <li>个性化策略指导</li>
+                    </ul>
+                </div>
+                <div class="feature-card">
+                    <h3>
+                        <span class="material-symbols-outlined">route</span>
+                        8步科学决策流程
+                    </h3>
+                    <p>从需求分析到效果评估的完整流程</p>
+                    <ul class="feature-list">
+                        <li>需求分析与动机澄清</li>
+                        <li>目标设定与期望管理</li>
+                        <li>市场调研与机构筛选</li>
+                        <li>决策评估与效果复盘</li>
+                    </ul>
+                </div>
+                <div class="feature-card">
+                    <h3>
+                        <span class="material-symbols-outlined">inventory_2</span>
+                        60+实用工具包
+                    </h3>
+                    <p>科学设计的评估和管理工具</p>
+                    <ul class="feature-list">
+                        <li>自我认知类：价值观排序、优势识别</li>
+                        <li>决策支持类：风险评估、投资计算</li>
+                        <li>沟通交流类：话术指南、冲突解决</li>
+                        <li>监测管理类：心理健康、效果评估</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer" id="contact">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand" id="about">
+                    <img src="https://docs.bccsw.cn/logo.png" alt="Logo">
+                    <p>专注于医美消费心理学研究，帮助消费者建立健康的美丽观念，做出理性的变美选择</p>
+                </div>
+                <div class="footer-contact">
+                    <p>
+                        <span class="material-symbols-outlined">location_on</span>
+                        重庆市渝中区临江支路28号
+                    </p>
+                    <p>
+                        <span class="material-symbols-outlined">mail</span>
+                        yuxiaodong@beaucare.org
+                    </p>
+                    <p>
+                        <span class="material-symbols-outlined">call</span>
+                        023-63326559
+                    </p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>
+                    重庆联合丽格科技有限公司 |
+                    <a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener noreferrer">渝ICP备2024023473号</a>
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Reader Overlay -->
+    <div class="reader-overlay" id="readerOverlay" onclick="closeReader()"></div>
+
+    <!-- Article Reader -->
+    <div class="reader" id="reader">
+        <div class="reader-header">
+            <button class="reader-close" onclick="closeReader()">
+                <span class="material-symbols-outlined">close</span>
+            </button>
+            <div class="reader-title" id="readerTitle">章节标题</div>
+            <div style="width: 40px;"></div>
+        </div>
+        <div class="reader-content">
+            <div class="markdown-body" id="readerContent">
+                <div class="loading">
+                    <div class="loading-spinner"></div>
+                    <span>加载中...</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Chapters Data
+        const chapters = [
+            {
+                number: '序',
+                title: '美丽的心灵地图',
+                subtitle: '三个女人的美丽困惑与时代背景',
+                file: '10-preface.md',
+                category: 'popular',
+                keywords: ['写作初心', '中立赋能', '原创理论'],
+                readTime: '25分钟',
+                wordCount: '1.5万字'
+            },
+            {
+                number: '1',
+                title: '我们为什么想变美？',
+                subtitle: '看见内心真实的渴望',
+                file: '02-motivation.md',
+                category: 'popular',
+                keywords: ['变美动机', '美丽杠杆', '价值观'],
+                readTime: '20分钟',
+                wordCount: '2.5万字'
+            },
+            {
+                number: '2',
+                title: '从心动到行动',
+                subtitle: '绘制你的专属决策地图',
+                file: '03-decision-making.md',
+                category: 'popular',
+                keywords: ['决策流程', '期望管理', '信息甄别'],
+                readTime: '20分钟',
+                wordCount: '2.5万字'
+            },
+            {
+                number: '3',
+                title: '营销的语言',
+                subtitle: '如何听懂弦外之音',
+                file: '04-marketing.md',
+                category: 'popular',
+                keywords: ['营销识别', '话术解读', '理性判断'],
+                readTime: '20分钟',
+                wordCount: '2.5万字'
+            },
+            {
+                number: '4',
+                title: '不同年龄的美丽密码',
+                subtitle: '每个阶段都有专属答案',
+                file: '05-age-stages.md',
+                category: 'popular',
+                keywords: ['年龄特征', '生命阶段', '适配选择'],
+                readTime: '20分钟',
+                wordCount: '2.5万字'
+            },
+            {
+                number: '5',
+                title: '美丽自我构建系统',
+                subtitle: '理解你的内在运行机制',
+                file: '06-self-system.md',
+                category: 'psychology',
+                keywords: ['三个自我', '认知心理学', '内在平衡'],
+                readTime: '18分钟',
+                wordCount: '2万字'
+            },
+            {
+                number: '6',
+                title: '培养强大的定锚自我',
+                subtitle: '你的幸福压舱石',
+                file: '07-inner-confidence.md',
+                category: 'positive',
+                keywords: ['心理资产', '自我慈悲', '正念'],
+                readTime: '18分钟',
+                wordCount: '2万字'
+            },
+            {
+                number: '7',
+                title: '美丽与幸福',
+                subtitle: '从外在改变到内在丰盈',
+                file: '08-beauty-happiness.md',
+                category: 'positive',
+                keywords: ['PERMA模型', '上行螺旋', '幸福感'],
+                readTime: '18分钟',
+                wordCount: '2万字'
+            },
+            {
+                number: '8',
+                title: '做自己的美丽规划师',
+                subtitle: '一份动态的人生蓝图',
+                file: '09-beauty-planner.md',
+                category: 'popular',
+                keywords: ['美丽规划', '项目管理', '长期视角'],
+                readTime: '20分钟',
+                wordCount: '2.5万字'
+            },
+            {
+                number: '后记',
+                title: '美丽心灵的共同探索',
+                subtitle: '五年研究历程与未来展望',
+                file: '11-epilogue.md',
+                category: 'popular',
+                keywords: ['研究历程', '理论贡献', '未来展望'],
+                readTime: '22分钟',
+                wordCount: '2万字'
+            },
+            {
+                number: '附录',
+                title: '心理学效应速查表',
+                subtitle: '50+常见心理学效应解析',
+                file: '12-psychology-effects-list.md',
+                category: 'psychology',
+                keywords: ['心理效应', '认知偏误', '速查工具'],
+                readTime: '15分钟',
+                wordCount: '1万字'
+            }
+        ];
+
+        // Render chapters
+        function renderChapters(filteredChapters) {
+            const grid = document.getElementById('chaptersGrid');
+            grid.innerHTML = filteredChapters.map(chapter => `
+                <article class="chapter-card" onclick="openChapter('${chapter.file}', '${chapter.title}')">
+                    <div class="chapter-header">
+                        <div class="chapter-number">${chapter.number}</div>
+                        <h3>${chapter.title}</h3>
+                    </div>
+                    <p class="chapter-subtitle">${chapter.subtitle}</p>
+                    <div class="chapter-keywords">
+                        ${chapter.keywords.map(k => `<span class="keyword">${k}</span>`).join('')}
+                    </div>
+                    <div class="chapter-meta">
+                        <span>
+                            <span class="material-symbols-outlined">schedule</span>
+                            ${chapter.readTime}
+                        </span>
+                        <span>
+                            <span class="material-symbols-outlined">article</span>
+                            ${chapter.wordCount}
+                        </span>
+                    </div>
+                </article>
+            `).join('');
+        }
+
+        // Filter chapters by category
+        function filterChapters(category) {
+            document.querySelectorAll('.chapter-tab').forEach(tab => {
+                tab.classList.toggle('active', tab.dataset.category === category);
+            });
+
+            const filtered = category === 'all'
+                ? chapters
+                : chapters.filter(c => c.category === category);
+            renderChapters(filtered);
+        }
+
+        // Open chapter in reader
+        async function openChapter(file, title) {
+            const reader = document.getElementById('reader');
+            const overlay = document.getElementById('readerOverlay');
+            const readerTitle = document.getElementById('readerTitle');
+            const readerContent = document.getElementById('readerContent');
+
+            reader.classList.add('active');
+            overlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
+
+            readerTitle.textContent = title;
+
+            readerContent.innerHTML = `
+                <div class="loading">
+                    <div class="loading-spinner"></div>
+                    <span>加载中...</span>
+                </div>
+            `;
+
+            try {
+                const response = await fetch(file);
+                if (!response.ok) throw new Error('Failed to load chapter');
+                const markdown = await response.text();
+
+                marked.setOptions({
+                    breaks: true,
+                    gfm: true
+                });
+
+                readerContent.innerHTML = marked.parse(markdown);
+            } catch (error) {
+                readerContent.innerHTML = `
+                    <div class="loading">
+                        <span class="material-symbols-outlined" style="font-size: 48px; color: var(--color-text-muted);">error_outline</span>
+                        <p style="margin-top: 1rem; color: var(--color-text-light);">无法加载章节内容，请稍后重试</p>
+                    </div>
+                `;
+            }
+        }
+
+        // Close reader
+        function closeReader() {
+            document.getElementById('reader').classList.remove('active');
+            document.getElementById('readerOverlay').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        // Mobile menu
+        function toggleMobileMenu() {
+            document.getElementById('mobileMenu').classList.toggle('active');
+        }
+
+        function closeMobileMenu() {
+            document.getElementById('mobileMenu').classList.remove('active');
+        }
+
+        // Close reader on escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeReader();
+        });
+
+        // Initial render
+        renderChapters(chapters);
+    </script>
+</body>
+</html>

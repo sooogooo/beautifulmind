@@ -25,6 +25,7 @@
     <style>
         :root {
             --color-bg: #FAFAF9;
+            --color-bg-alt: #F5F5F4;
             --color-surface: #FFFFFF;
             --color-text: #3D3D3D;
             --color-text-light: #737373;
@@ -39,6 +40,7 @@
             --font-serif: 'Noto Serif SC', Georgia, serif;
 
             --max-width: 720px;
+            --toc-width: 260px;
             --spacing-md: 1.5rem;
             --spacing-lg: 2rem;
             --spacing-xl: 3rem;
@@ -75,7 +77,7 @@
         }
 
         .header-inner {
-            max-width: var(--max-width);
+            max-width: calc(var(--max-width) + var(--toc-width) + 100px);
             margin: 0 auto;
             padding: 0.75rem var(--spacing-md);
             display: flex;
@@ -114,6 +116,16 @@
             text-overflow: ellipsis;
         }
 
+        .toc-toggle {
+            display: none;
+            background: none;
+            border: 1px solid var(--color-border);
+            border-radius: 8px;
+            padding: 0.5rem;
+            cursor: pointer;
+            color: var(--color-text-light);
+        }
+
         /* Progress Bar */
         .progress-bar {
             position: fixed;
@@ -126,10 +138,94 @@
             transition: width 0.1s ease;
         }
 
+        /* Layout */
+        .layout {
+            display: flex;
+            max-width: calc(var(--max-width) + var(--toc-width) + 100px);
+            margin: 0 auto;
+            position: relative;
+        }
+
+        /* TOC Sidebar */
+        .toc-sidebar {
+            width: var(--toc-width);
+            flex-shrink: 0;
+            padding: var(--spacing-xl) var(--spacing-md);
+            position: sticky;
+            top: 60px;
+            height: calc(100vh - 60px);
+            overflow-y: auto;
+        }
+
+        .toc-title {
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: var(--color-text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .toc-title .material-symbols-outlined {
+            font-size: 16px;
+        }
+
+        .toc-list {
+            list-style: none;
+        }
+
+        .toc-item {
+            margin-bottom: 0.5rem;
+        }
+
+        .toc-link {
+            display: block;
+            font-size: 0.85rem;
+            color: var(--color-text-light);
+            text-decoration: none;
+            padding: 0.35rem 0.75rem;
+            border-left: 2px solid transparent;
+            transition: all 0.2s ease;
+            line-height: 1.4;
+        }
+
+        .toc-link:hover {
+            color: var(--color-text);
+            background: var(--color-bg-alt);
+        }
+
+        .toc-link.active {
+            color: var(--color-primary);
+            border-left-color: var(--color-primary);
+            background: var(--color-primary-light);
+        }
+
+        .toc-link.toc-h3 {
+            padding-left: 1.5rem;
+            font-size: 0.8rem;
+        }
+
+        /* Decorative Image */
+        .toc-decor {
+            margin-top: var(--spacing-lg);
+            border-radius: 12px;
+            overflow: hidden;
+            opacity: 0.9;
+        }
+
+        .toc-decor img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
         /* Main Content */
         .main {
+            flex: 1;
             max-width: var(--max-width);
-            margin: 0 auto;
             padding: var(--spacing-xl) var(--spacing-md);
             min-height: calc(100vh - 200px);
         }
@@ -139,6 +235,19 @@
             margin-bottom: var(--spacing-xl);
             padding-bottom: var(--spacing-lg);
             border-bottom: 1px solid var(--color-border-light);
+            position: relative;
+        }
+
+        .article-decor {
+            position: absolute;
+            right: -20px;
+            top: -20px;
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            opacity: 0.15;
+            pointer-events: none;
         }
 
         .article-chapter {
@@ -192,6 +301,12 @@
             font-size: 1.05rem;
             line-height: 2;
             color: var(--color-text);
+        }
+
+        .markdown-body h1,
+        .markdown-body h2,
+        .markdown-body h3 {
+            scroll-margin-top: 80px;
         }
 
         .markdown-body h1 {
@@ -333,6 +448,114 @@
             margin: 1.5rem 0;
         }
 
+        /* Chapter Navigation */
+        .chapter-nav {
+            display: flex;
+            justify-content: space-between;
+            gap: 1rem;
+            margin: var(--spacing-xl) 0;
+            padding-top: var(--spacing-lg);
+            border-top: 1px solid var(--color-border-light);
+        }
+
+        .chapter-nav a {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.25rem;
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+            border-radius: 8px;
+            color: var(--color-text-light);
+            text-decoration: none;
+            font-size: 0.875rem;
+            transition: all 0.2s ease;
+            max-width: 45%;
+        }
+
+        .chapter-nav a:hover {
+            border-color: var(--color-primary);
+            color: var(--color-text);
+        }
+
+        .chapter-nav a.disabled {
+            opacity: 0.5;
+            pointer-events: none;
+        }
+
+        .chapter-nav .nav-label {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        /* Footer - Same as main page */
+        .footer {
+            border-top: 1px solid var(--color-border);
+            padding: var(--spacing-xl) 0 var(--spacing-lg);
+            margin-top: var(--spacing-xl);
+            background: var(--color-surface);
+        }
+
+        .footer-content {
+            max-width: calc(var(--max-width) + var(--toc-width) + 100px);
+            margin: 0 auto;
+            padding: 0 var(--spacing-md);
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: var(--spacing-lg);
+            text-align: center;
+        }
+
+        .footer-brand img {
+            height: 40px;
+            margin-bottom: var(--spacing-md);
+            opacity: 0.7;
+        }
+
+        .footer-brand p {
+            font-size: 0.875rem;
+            color: var(--color-text-light);
+            max-width: 300px;
+            margin: 0 auto;
+        }
+
+        .footer-contact {
+            font-size: 0.875rem;
+            color: var(--color-text-light);
+        }
+
+        .footer-contact p {
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .footer-contact .material-symbols-outlined {
+            font-size: 16px;
+            color: var(--color-text-muted);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: var(--spacing-lg);
+            margin-top: var(--spacing-lg);
+            border-top: 1px solid var(--color-border-light);
+            font-size: 0.75rem;
+            color: var(--color-text-muted);
+        }
+
+        .footer-bottom a {
+            color: var(--color-text-light);
+            text-decoration: none;
+        }
+
+        .footer-bottom a:hover {
+            color: var(--color-text);
+        }
+
         /* Loading State */
         .loading {
             display: flex;
@@ -380,52 +603,46 @@
             color: var(--color-text-light);
         }
 
-        /* Footer */
-        .footer {
-            max-width: var(--max-width);
-            margin: 0 auto;
-            padding: var(--spacing-xl) var(--spacing-md);
-            border-top: 1px solid var(--color-border-light);
-            text-align: center;
+        /* Mobile Styles */
+        @media (max-width: 1024px) {
+            .toc-sidebar {
+                display: none;
+                position: fixed;
+                top: 60px;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                width: 100%;
+                height: auto;
+                background: var(--color-surface);
+                z-index: 99;
+                padding: var(--spacing-md);
+                border-bottom: 1px solid var(--color-border);
+            }
+
+            .toc-sidebar.active {
+                display: block;
+            }
+
+            .toc-toggle {
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+            }
+
+            .toc-decor {
+                display: none;
+            }
+
+            .layout {
+                flex-direction: column;
+            }
+
+            .main {
+                max-width: 100%;
+            }
         }
 
-        .footer-nav {
-            display: flex;
-            justify-content: space-between;
-            gap: 1rem;
-            margin-bottom: var(--spacing-lg);
-        }
-
-        .footer-nav a {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.75rem 1.25rem;
-            background: var(--color-surface);
-            border: 1px solid var(--color-border);
-            border-radius: 8px;
-            color: var(--color-text-light);
-            text-decoration: none;
-            font-size: 0.875rem;
-            transition: all 0.2s ease;
-        }
-
-        .footer-nav a:hover {
-            border-color: var(--color-primary);
-            color: var(--color-text);
-        }
-
-        .footer-nav a.disabled {
-            opacity: 0.5;
-            pointer-events: none;
-        }
-
-        .footer-copyright {
-            font-size: 0.75rem;
-            color: var(--color-text-muted);
-        }
-
-        /* Mobile */
         @media (max-width: 640px) {
             :root {
                 --spacing-md: 1rem;
@@ -441,18 +658,27 @@
                 display: none;
             }
 
-            .footer-nav {
+            .chapter-nav {
                 flex-direction: column;
             }
 
-            .footer-nav a {
+            .chapter-nav a {
+                max-width: 100%;
                 justify-content: center;
+            }
+
+            .article-decor {
+                display: none;
+            }
+
+            .footer-content {
+                gap: var(--spacing-md);
             }
         }
 
         /* Print Styles */
         @media print {
-            .header, .footer, .progress-bar {
+            .header, .footer, .progress-bar, .toc-sidebar, .chapter-nav {
                 display: none;
             }
             .main {
@@ -474,37 +700,90 @@
                 返回目录
             </a>
             <div class="header-title" id="headerTitle">加载中...</div>
+            <button class="toc-toggle" onclick="toggleToc()">
+                <span class="material-symbols-outlined">toc</span>
+                目录
+            </button>
         </div>
     </header>
 
-    <!-- Main Content -->
-    <main class="main">
-        <article id="article">
-            <div class="loading" id="loading">
-                <div class="loading-spinner"></div>
-                <span>正在加载文章...</span>
+    <!-- Layout -->
+    <div class="layout">
+        <!-- TOC Sidebar -->
+        <aside class="toc-sidebar" id="tocSidebar">
+            <div class="toc-title">
+                <span class="material-symbols-outlined">list</span>
+                本章目录
             </div>
-        </article>
-    </main>
+            <nav>
+                <ul class="toc-list" id="tocList">
+                    <li class="toc-item"><span style="color: var(--color-text-muted); font-size: 0.85rem;">加载中...</span></li>
+                </ul>
+            </nav>
+            <div class="toc-decor">
+                <img src="" alt="" id="tocDecorImg" loading="lazy">
+            </div>
+        </aside>
 
-    <!-- Footer -->
-    <footer class="footer" id="footer" style="display: none;">
-        <nav class="footer-nav">
-            <a href="#" id="prevChapter" class="disabled">
-                <span class="material-symbols-outlined">chevron_left</span>
-                上一章
-            </a>
-            <a href="#" id="nextChapter" class="disabled">
-                下一章
-                <span class="material-symbols-outlined">chevron_right</span>
-            </a>
-        </nav>
-        <div class="footer-copyright">
-            <p>© 重庆联合丽格科技有限公司 | 美丽的心灵地图</p>
+        <!-- Main Content -->
+        <main class="main">
+            <article id="article">
+                <div class="loading" id="loading">
+                    <div class="loading-spinner"></div>
+                    <span>正在加载文章...</span>
+                </div>
+            </article>
+        </main>
+    </div>
+
+    <!-- Footer - Same as main page -->
+    <footer class="footer" id="footer">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <img src="https://docs.bccsw.cn/logo.png" alt="Logo">
+                <p>专注于医美消费心理学研究，帮助消费者建立健康的美丽观念，做出理性的变美选择</p>
+            </div>
+            <div class="footer-contact">
+                <p>
+                    <span class="material-symbols-outlined">location_on</span>
+                    重庆市渝中区临江支路28号
+                </p>
+                <p>
+                    <span class="material-symbols-outlined">mail</span>
+                    yuxiaodong@beaucare.org
+                </p>
+                <p>
+                    <span class="material-symbols-outlined">call</span>
+                    023-63326559
+                </p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>
+                重庆联合丽格科技有限公司 |
+                <a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener noreferrer">渝ICP备2024023473号</a>
+            </p>
         </div>
     </footer>
 
     <script>
+        // Random decorative images
+        const decorImages = [
+            'images/portrait-01.jpg', 'images/portrait-02.jpg', 'images/portrait-03.jpg',
+            'images/portrait-04.jpg', 'images/portrait-05.jpg', 'images/portrait-06.jpg',
+            'images/portrait-07.jpg', 'images/portrait-08.jpg', 'images/portrait-09.jpg',
+            'images/portrait-10.jpg', 'images/portrait-11.jpg', 'images/portrait-12.jpg',
+            'images/aiart-17.jpg', 'images/aiart-28.jpg', 'images/aiart-39.jpg',
+            'images/era-2020s-01.jpg', 'images/era-2020s-02.jpg', 'images/era-2010s-01.jpg'
+        ];
+
+        function setRandomDecorImages() {
+            const shuffled = decorImages.sort(() => Math.random() - 0.5);
+            document.getElementById('tocDecorImg').src = shuffled[0];
+            const articleDecor = document.getElementById('articleDecorImg');
+            if (articleDecor) articleDecor.src = shuffled[1];
+        }
+
         // Chapter data
         const chapters = [
             { number: '序', title: '美丽的心灵地图', subtitle: '三个女人的美丽困惑与时代背景', file: '10-preface.md', readTime: '25分钟', wordCount: '1.5万字' },
@@ -536,22 +815,94 @@
             return chapters.findIndex(c => c.file === filename);
         }
 
-        // Update navigation
-        function updateNavigation(currentIndex) {
-            const prevBtn = document.getElementById('prevChapter');
-            const nextBtn = document.getElementById('nextChapter');
+        // Generate TOC from headings
+        function generateToc(container) {
+            const headings = container.querySelectorAll('h1, h2, h3');
+            const tocList = document.getElementById('tocList');
+
+            if (headings.length === 0) {
+                tocList.innerHTML = '<li class="toc-item"><span style="color: var(--color-text-muted); font-size: 0.85rem;">暂无目录</span></li>';
+                return;
+            }
+
+            let tocHtml = '';
+            headings.forEach((heading, index) => {
+                const id = `heading-${index}`;
+                heading.id = id;
+                const level = heading.tagName.toLowerCase();
+                const levelClass = level === 'h3' ? ' toc-h3' : '';
+                tocHtml += `<li class="toc-item">
+                    <a href="#${id}" class="toc-link${levelClass}" data-id="${id}">${heading.textContent}</a>
+                </li>`;
+            });
+
+            tocList.innerHTML = tocHtml;
+
+            // Add click handlers
+            tocList.querySelectorAll('.toc-link').forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const targetId = link.getAttribute('data-id');
+                    const target = document.getElementById(targetId);
+                    if (target) {
+                        target.scrollIntoView({ behavior: 'smooth' });
+                        // Close mobile TOC
+                        document.getElementById('tocSidebar').classList.remove('active');
+                    }
+                });
+            });
+
+            // Highlight current section on scroll
+            observeHeadings(headings);
+        }
+
+        // Observe headings for active state
+        function observeHeadings(headings) {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const id = entry.target.id;
+                        document.querySelectorAll('.toc-link').forEach(link => {
+                            link.classList.toggle('active', link.getAttribute('data-id') === id);
+                        });
+                    }
+                });
+            }, { rootMargin: '-80px 0px -70% 0px' });
+
+            headings.forEach(heading => observer.observe(heading));
+        }
+
+        // Toggle mobile TOC
+        function toggleToc() {
+            document.getElementById('tocSidebar').classList.toggle('active');
+        }
+
+        // Create chapter navigation
+        function createChapterNav(currentIndex) {
+            let navHtml = '<nav class="chapter-nav">';
 
             if (currentIndex > 0) {
-                prevBtn.classList.remove('disabled');
-                prevBtn.href = `reader.html?file=${chapters[currentIndex - 1].file}`;
-                prevBtn.innerHTML = `<span class="material-symbols-outlined">chevron_left</span>${chapters[currentIndex - 1].title}`;
+                const prev = chapters[currentIndex - 1];
+                navHtml += `<a href="reader.html?file=${prev.file}">
+                    <span class="material-symbols-outlined">chevron_left</span>
+                    <span class="nav-label">${prev.title}</span>
+                </a>`;
+            } else {
+                navHtml += '<a class="disabled"><span class="material-symbols-outlined">chevron_left</span><span class="nav-label">上一章</span></a>';
             }
 
             if (currentIndex < chapters.length - 1) {
-                nextBtn.classList.remove('disabled');
-                nextBtn.href = `reader.html?file=${chapters[currentIndex + 1].file}`;
-                nextBtn.innerHTML = `${chapters[currentIndex + 1].title}<span class="material-symbols-outlined">chevron_right</span>`;
+                const next = chapters[currentIndex + 1];
+                navHtml += `<a href="reader.html?file=${next.file}">
+                    <span class="nav-label">${next.title}</span>
+                    <span class="material-symbols-outlined">chevron_right</span>
+                </a>`;
+            } else {
+                navHtml += '<a class="disabled"><span class="nav-label">下一章</span><span class="material-symbols-outlined">chevron_right</span></a>';
             }
+
+            navHtml += '</nav>';
+            return navHtml;
         }
 
         // Update progress bar on scroll
@@ -588,6 +939,7 @@
 
                 // Render article
                 const article = document.getElementById('article');
+                const shuffled = decorImages.sort(() => Math.random() - 0.5);
 
                 if (chapter) {
                     document.title = `${chapter.title} | 美丽的心灵地图`;
@@ -595,6 +947,7 @@
 
                     article.innerHTML = `
                         <header class="article-header">
+                            <img src="${shuffled[1]}" alt="" class="article-decor" id="articleDecorImg">
                             <span class="article-chapter">第${chapter.number}章</span>
                             <h1 class="article-title">${chapter.title}</h1>
                             <p class="article-subtitle">${chapter.subtitle}</p>
@@ -603,17 +956,18 @@
                                 <span><span class="material-symbols-outlined">article</span>${chapter.wordCount}</span>
                             </div>
                         </header>
-                        <div class="markdown-body">${marked.parse(markdown)}</div>
+                        <div class="markdown-body" id="markdownBody">${marked.parse(markdown)}</div>
+                        ${createChapterNav(chapterIndex)}
                     `;
-
-                    updateNavigation(chapterIndex);
-                    document.getElementById('footer').style.display = 'block';
                 } else {
                     // Generic markdown file
                     document.title = `阅读 | 美丽的心灵地图`;
                     document.getElementById('headerTitle').textContent = file;
-                    article.innerHTML = `<div class="markdown-body">${marked.parse(markdown)}</div>`;
+                    article.innerHTML = `<div class="markdown-body" id="markdownBody">${marked.parse(markdown)}</div>`;
                 }
+
+                // Generate TOC
+                generateToc(document.getElementById('markdownBody'));
 
                 // Scroll to top
                 window.scrollTo(0, 0);
@@ -643,6 +997,7 @@
         window.addEventListener('scroll', updateProgress);
 
         // Initialize
+        setRandomDecorImages();
         loadArticle();
     </script>
 </body>

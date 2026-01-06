@@ -153,6 +153,23 @@
             background: rgba(250, 250, 249, 0.95);
             backdrop-filter: blur(10px);
             border-bottom: var(--border-light);
+            transition: all 0.3s ease;
+        }
+
+        .header.scrolled {
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.06);
+        }
+
+        .header.shrink .header-inner {
+            height: 48px;
+        }
+
+        .header.shrink .logo img {
+            height: 26px;
+        }
+
+        .header.shrink .logo-text {
+            font-size: 0.8rem;
         }
 
         .header-inner {
@@ -160,6 +177,7 @@
             align-items: center;
             justify-content: space-between;
             height: 60px;
+            transition: height 0.3s ease;
         }
 
         .logo {
@@ -171,6 +189,7 @@
         .logo img {
             height: 32px;
             width: auto;
+            transition: height 0.3s ease;
         }
 
         .logo-text {
@@ -178,6 +197,7 @@
             font-weight: var(--font-weight-regular);
             letter-spacing: var(--letter-spacing-wide);
             color: var(--color-text-light);
+            transition: font-size 0.3s ease;
         }
 
         .nav-links {
@@ -499,12 +519,29 @@
             transition: all var(--transition-normal);
             display: flex;
             flex-direction: column;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .chapter-card.animate-in {
+            animation: cardFadeIn 0.5s ease forwards;
+        }
+
+        @keyframes cardFadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .chapter-card:hover {
             border-color: var(--color-primary);
             transform: translateY(-2px);
             box-shadow: 0 8px 24px rgba(0,0,0,0.05);
+        }
+
+        .chapter-card.animate-in:hover {
+            transform: translateY(-2px);
         }
 
         /* Chapter card preview image */
@@ -1692,6 +1729,9 @@
                 ? chapters
                 : chapters.filter(c => c.category === category);
             renderChapters(filtered);
+
+            // Re-animate cards after filtering
+            setTimeout(animateChapterCards, 50);
         }
 
         // Open chapter in new window
@@ -1736,6 +1776,63 @@
 
         // Initial render
         renderChapters(chapters);
+
+        // ==================== Header Scroll Effect ====================
+        const header = document.querySelector('.header');
+        let lastScroll = 0;
+        let ticking = false;
+
+        function updateHeader() {
+            const currentScroll = window.pageYOffset;
+
+            if (currentScroll > 10) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+
+            if (currentScroll > 100) {
+                header.classList.add('shrink');
+            } else {
+                header.classList.remove('shrink');
+            }
+
+            lastScroll = currentScroll;
+            ticking = false;
+        }
+
+        window.addEventListener('scroll', () => {
+            if (!ticking) {
+                requestAnimationFrame(updateHeader);
+                ticking = true;
+            }
+        }, { passive: true });
+
+        // ==================== Chapter Cards Staggered Animation ====================
+        function animateChapterCards() {
+            const cards = document.querySelectorAll('.chapter-card');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach((entry, index) => {
+                    if (entry.isIntersecting) {
+                        // Calculate stagger delay based on visible order
+                        const visibleCards = Array.from(cards).filter(c =>
+                            c.getBoundingClientRect().top < window.innerHeight
+                        );
+                        const cardIndex = visibleCards.indexOf(entry.target);
+                        const delay = cardIndex * 0.05;
+
+                        entry.target.style.animationDelay = `${delay}s`;
+                        entry.target.classList.add('animate-in');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            cards.forEach(card => observer.observe(card));
+        }
+
+        // Run animation after initial render
+        setTimeout(animateChapterCards, 100);
 
         // ==================== CountUp Animation ====================
         function animateCountUp(element) {

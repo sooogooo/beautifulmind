@@ -1354,6 +1354,182 @@
             transform: translateX(20px);
         }
 
+        /* ==================== Share Panel ==================== */
+        .share-panel {
+            position: fixed;
+            bottom: -300px;
+            left: 0;
+            right: 0;
+            background: var(--color-surface);
+            border-radius: 20px 20px 0 0;
+            padding: 1.5rem;
+            z-index: 2500;
+            transition: bottom 0.3s ease;
+            box-shadow: 0 -4px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .share-panel.active {
+            bottom: 0;
+        }
+
+        .share-panel-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+        }
+
+        .share-panel-title {
+            font-size: 1rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .share-panel-close {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0.5rem;
+            color: var(--color-text-muted);
+            border-radius: 50%;
+        }
+
+        .share-panel-close:hover {
+            background: var(--color-bg-alt);
+            color: var(--color-text);
+        }
+
+        .share-options {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .share-option {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 1rem;
+            background: var(--color-bg-alt);
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            min-width: 80px;
+            transition: all 0.2s ease;
+        }
+
+        .share-option:hover {
+            background: var(--color-primary-light);
+        }
+
+        .share-option .material-symbols-outlined {
+            font-size: 28px;
+            color: var(--color-primary);
+        }
+
+        .share-option span:last-child {
+            font-size: 0.75rem;
+            color: var(--color-text-light);
+        }
+
+        .share-url-box {
+            display: flex;
+            gap: 0.5rem;
+            padding: 0.75rem;
+            background: var(--color-bg-alt);
+            border-radius: 10px;
+            margin-bottom: 1rem;
+        }
+
+        .share-url-box input {
+            flex: 1;
+            border: none;
+            background: transparent;
+            font-size: 0.85rem;
+            color: var(--color-text);
+            outline: none;
+        }
+
+        .share-url-box button {
+            padding: 0.5rem 1rem;
+            background: var(--color-primary);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+
+        .share-url-box button:hover {
+            background: #8A7995;
+        }
+
+        .share-qr {
+            text-align: center;
+            padding: 1rem;
+            background: white;
+            border-radius: 12px;
+            display: none;
+        }
+
+        .share-qr.active {
+            display: block;
+        }
+
+        .share-qr img {
+            width: 160px;
+            height: 160px;
+            margin: 0 auto 0.5rem;
+        }
+
+        .share-qr p {
+            font-size: 0.75rem;
+            color: var(--color-text-muted);
+        }
+
+        .share-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.4);
+            z-index: 2400;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .share-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 100px;
+            left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            background: var(--color-text);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 100px;
+            font-size: 0.85rem;
+            z-index: 9999;
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+
+        .toast.active {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
         /* ==================== Image Lightbox ==================== */
         .lightbox {
             position: fixed;
@@ -1731,6 +1907,9 @@
                 <span class="progress-text" id="progressText">0%</span>
             </div>
             <div class="header-right">
+                <button class="header-btn" onclick="openShare()" title="分享">
+                    <span class="material-symbols-outlined">share</span>
+                </button>
                 <button class="header-btn" onclick="openAbout()" title="关于本站">
                     <span class="material-symbols-outlined">info</span>
                 </button>
@@ -1956,6 +2135,48 @@
             </section>
         </div>
     </div>
+
+    <!-- Share Panel -->
+    <div class="share-overlay" id="shareOverlay" onclick="closeShare()"></div>
+    <div class="share-panel" id="sharePanel">
+        <div class="share-panel-header">
+            <div class="share-panel-title">
+                <span class="material-symbols-outlined">share</span>
+                分享本章
+            </div>
+            <button class="share-panel-close" onclick="closeShare()">
+                <span class="material-symbols-outlined">close</span>
+            </button>
+        </div>
+
+        <div class="share-options">
+            <button class="share-option" onclick="copyShareLink()">
+                <span class="material-symbols-outlined">link</span>
+                <span>复制链接</span>
+            </button>
+            <button class="share-option" onclick="toggleQRCode()">
+                <span class="material-symbols-outlined">qr_code_2</span>
+                <span>二维码</span>
+            </button>
+            <button class="share-option" onclick="nativeShare()">
+                <span class="material-symbols-outlined">ios_share</span>
+                <span>更多</span>
+            </button>
+        </div>
+
+        <div class="share-url-box">
+            <input type="text" id="shareUrl" readonly>
+            <button onclick="copyShareLink()">复制</button>
+        </div>
+
+        <div class="share-qr" id="shareQR">
+            <img id="qrImage" src="" alt="QR Code">
+            <p>扫描二维码阅读本章</p>
+        </div>
+    </div>
+
+    <!-- Toast Message -->
+    <div class="toast" id="toast"></div>
 
     <!-- Image Lightbox -->
     <div class="lightbox" id="lightbox" onclick="closeLightbox()">
@@ -2219,6 +2440,67 @@
             }
         }
 
+        // ==================== Share Functions ====================
+        function openShare() {
+            const url = window.location.href;
+            document.getElementById('shareUrl').value = url;
+            document.getElementById('shareOverlay').classList.add('active');
+            document.getElementById('sharePanel').classList.add('active');
+
+            // Generate QR code
+            const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(url)}`;
+            document.getElementById('qrImage').src = qrUrl;
+        }
+
+        function closeShare() {
+            document.getElementById('shareOverlay').classList.remove('active');
+            document.getElementById('sharePanel').classList.remove('active');
+            document.getElementById('shareQR').classList.remove('active');
+        }
+
+        function copyShareLink() {
+            const url = window.location.href;
+            navigator.clipboard.writeText(url).then(() => {
+                showToast('链接已复制到剪贴板');
+            }).catch(() => {
+                // Fallback for older browsers
+                const input = document.getElementById('shareUrl');
+                input.select();
+                document.execCommand('copy');
+                showToast('链接已复制到剪贴板');
+            });
+        }
+
+        function toggleQRCode() {
+            document.getElementById('shareQR').classList.toggle('active');
+        }
+
+        function nativeShare() {
+            if (navigator.share) {
+                const chapter = getChapterInfo(getFileParam());
+                navigator.share({
+                    title: chapter ? `${chapter.title} | 美丽的心灵地图` : '美丽的心灵地图',
+                    text: chapter ? chapter.subtitle : '医美消费心理学 · 理性变美指南',
+                    url: window.location.href
+                }).then(() => {
+                    closeShare();
+                }).catch((error) => {
+                    console.log('Share failed:', error);
+                });
+            } else {
+                showToast('您的浏览器不支持原生分享');
+            }
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('active');
+            setTimeout(() => {
+                toast.classList.remove('active');
+            }, 2000);
+        }
+
         // ==================== Chapter Data ====================
         const chapters = [
             { number: '序', title: '美丽的心灵地图', subtitle: '三个女人的美丽困惑与时代背景', file: '10-preface.md', readTime: '25分钟', wordCount: '1.5万字' },
@@ -2446,6 +2728,7 @@
                         closeSettings();
                         closeLightbox();
                         closeAbout();
+                        closeShare();
                         document.getElementById('tocSidebar').classList.remove('active');
                         break;
                 }

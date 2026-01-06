@@ -1,0 +1,25 @@
+# Robots.txt for 美丽的心灵地图
+# https://beautifulmind.train.bccsw.cn/
+
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://beautifulmind.train.bccsw.cn/sitemap.xml
+
+# Crawl-delay for polite crawling
+Crawl-delay: 1
+
+# Block service worker and manifest from indexing
+Disallow: /service-worker.js
+Disallow: /manifest.json
+Disallow: /offline.html
+
+# Allow all pages and resources
+Allow: /index.html
+Allow: /reader.html
+Allow: /feature-*.html
+Allow: /css/
+Allow: /js/
+Allow: /images/
+Allow: /md/

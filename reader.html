@@ -10,6 +10,13 @@
 
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="https://docs.bccsw.cn/favicon.png">
+    <link rel="apple-touch-icon" href="https://docs.bccsw.cn/logo.png">
+
+    <!-- PWA -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#9B8AA6">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -1523,6 +1530,52 @@
             }
         }
 
+        /* ==================== Swipe Indicator ==================== */
+        .swipe-indicator {
+            position: fixed;
+            top: 50%;
+            transform: translateY(-50%);
+            background: var(--color-primary);
+            color: white;
+            padding: 0.75rem 1.25rem;
+            border-radius: var(--radius-full);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            font-weight: 500;
+            z-index: 9999;
+            opacity: 0;
+            transition: opacity 0.2s ease, transform 0.2s ease;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .swipe-indicator.prev {
+            left: 1rem;
+            transform: translateY(-50%) translateX(-20px);
+        }
+
+        .swipe-indicator.next {
+            right: 1rem;
+            transform: translateY(-50%) translateX(20px);
+        }
+
+        .swipe-indicator.active {
+            opacity: 1;
+        }
+
+        .swipe-indicator.active.prev {
+            transform: translateY(-50%) translateX(0);
+        }
+
+        .swipe-indicator.active.next {
+            transform: translateY(-50%) translateX(0);
+        }
+
+        .swipe-indicator .material-symbols-outlined {
+            font-size: 20px;
+        }
+
         @media (max-width: 640px) {
             :root {
                 --spacing-md: 1rem;
@@ -2256,6 +2309,86 @@
             });
         }
 
+        // ==================== Touch Swipe Navigation ====================
+        function setupTouchNavigation() {
+            let touchStartX = 0;
+            let touchStartY = 0;
+            let touchEndX = 0;
+            let touchEndY = 0;
+            const minSwipeDistance = 80;
+            const maxVerticalDistance = 100;
+
+            const article = document.getElementById('article');
+            if (!article) return;
+
+            article.addEventListener('touchstart', (e) => {
+                touchStartX = e.changedTouches[0].screenX;
+                touchStartY = e.changedTouches[0].screenY;
+            }, { passive: true });
+
+            article.addEventListener('touchend', (e) => {
+                touchEndX = e.changedTouches[0].screenX;
+                touchEndY = e.changedTouches[0].screenY;
+                handleSwipe();
+            }, { passive: true });
+
+            function handleSwipe() {
+                const deltaX = touchEndX - touchStartX;
+                const deltaY = touchEndY - touchStartY;
+
+                // Only trigger if horizontal swipe is dominant
+                if (Math.abs(deltaX) < minSwipeDistance) return;
+                if (Math.abs(deltaY) > maxVerticalDistance) return;
+
+                if (deltaX > 0) {
+                    // Swipe right → previous chapter
+                    navigateToPrevChapter();
+                } else {
+                    // Swipe left → next chapter
+                    navigateToNextChapter();
+                }
+            }
+
+            function navigateToPrevChapter() {
+                const file = getFileParam();
+                const currentIndex = getChapterIndex(file);
+                if (currentIndex > 0) {
+                    showSwipeIndicator('prev');
+                    setTimeout(() => {
+                        window.location.href = `reader.html?file=${encodeURIComponent(chapters[currentIndex - 1].file)}`;
+                    }, 200);
+                }
+            }
+
+            function navigateToNextChapter() {
+                const file = getFileParam();
+                const currentIndex = getChapterIndex(file);
+                if (currentIndex < chapters.length - 1) {
+                    showSwipeIndicator('next');
+                    setTimeout(() => {
+                        window.location.href = `reader.html?file=${encodeURIComponent(chapters[currentIndex + 1].file)}`;
+                    }, 200);
+                }
+            }
+
+            function showSwipeIndicator(direction) {
+                const indicator = document.createElement('div');
+                indicator.className = 'swipe-indicator ' + direction;
+                indicator.innerHTML = direction === 'prev'
+                    ? '<span class="material-symbols-outlined">chevron_left</span><span>上一章</span>'
+                    : '<span>下一章</span><span class="material-symbols-outlined">chevron_right</span>';
+                document.body.appendChild(indicator);
+
+                requestAnimationFrame(() => {
+                    indicator.classList.add('active');
+                });
+
+                setTimeout(() => {
+                    indicator.remove();
+                }, 500);
+            }
+        }
+
         // ==================== Load Article ====================
         async function loadArticle() {
             const file = getFileParam();
@@ -2356,7 +2489,19 @@
         // ==================== Initialize ====================
         loadSettings();
         setupKeyboardShortcuts();
+        setupTouchNavigation();
         loadArticle();
+
+        // ==================== Service Worker Registration ====================
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/service-worker.js')
+                .then(registration => {
+                    console.log('[PWA] Service Worker registered');
+                })
+                .catch(error => {
+                    console.log('[PWA] Service Worker registration failed:', error);
+                });
+        }
     </script>
 </body>
 </html>

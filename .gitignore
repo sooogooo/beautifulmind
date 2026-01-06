@@ -53,3 +53,4 @@ build/
 *.key
 .env.local
 .env.*.local
+optimize.md

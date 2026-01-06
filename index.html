@@ -57,6 +57,9 @@
     <!-- Marked.js for Markdown -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 
+    <!-- Fuse.js for Search -->
+    <script src="https://cdn.jsdelivr.net/npm/fuse.js@7.0.0"></script>
+
     <style>
         /* ==================== CSS Variables ==================== */
         :root {
@@ -256,6 +259,31 @@
         .menu-btn .material-symbols-outlined {
             font-size: 24px;
             color: var(--color-text);
+        }
+
+        /* Search Button */
+        .search-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: none;
+            border: 1px solid var(--color-border);
+            border-radius: 8px;
+            padding: var(--spacing-xs) var(--spacing-sm);
+            cursor: pointer;
+            color: var(--color-text-light);
+            transition: all var(--transition-fast);
+            margin-right: var(--spacing-sm);
+        }
+
+        .search-btn:hover {
+            border-color: var(--color-primary);
+            color: var(--color-text);
+            background: var(--color-bg-alt);
+        }
+
+        .search-btn .material-symbols-outlined {
+            font-size: 20px;
         }
 
         /* ==================== Hero Section ==================== */
@@ -965,6 +993,265 @@
             color: var(--color-text);
         }
 
+        /* ==================== Search Modal ==================== */
+        .search-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 4000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.2s ease;
+            backdrop-filter: blur(4px);
+        }
+
+        .search-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .search-modal {
+            position: fixed;
+            top: 15%;
+            left: 50%;
+            transform: translateX(-50%) translateY(-20px);
+            background: var(--color-surface);
+            border-radius: 16px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 70vh;
+            z-index: 4001;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.2s ease;
+            box-shadow: 0 25px 80px rgba(0, 0, 0, 0.25);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .search-modal.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        .search-header {
+            padding: 1rem;
+            border-bottom: 1px solid var(--color-border-light);
+        }
+
+        .search-input-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            background: var(--color-bg-alt);
+            border-radius: 10px;
+            padding: 0.75rem 1rem;
+        }
+
+        .search-input-wrapper .material-symbols-outlined {
+            color: var(--color-text-muted);
+            font-size: 22px;
+        }
+
+        .search-input-wrapper input {
+            flex: 1;
+            border: none;
+            background: transparent;
+            font-size: 1rem;
+            color: var(--color-text);
+            outline: none;
+        }
+
+        .search-input-wrapper input::placeholder {
+            color: var(--color-text-muted);
+        }
+
+        .search-shortcut {
+            background: var(--color-border);
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            color: var(--color-text-muted);
+            font-family: inherit;
+        }
+
+        .search-results {
+            flex: 1;
+            overflow-y: auto;
+            padding: 0.5rem;
+            min-height: 200px;
+            max-height: 400px;
+        }
+
+        .search-hint {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            padding: 1.5rem;
+            color: var(--color-text-muted);
+        }
+
+        .search-hint .material-symbols-outlined {
+            font-size: 20px;
+            color: var(--color-primary);
+        }
+
+        .search-hint p {
+            font-size: 0.9rem;
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        .search-result-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            padding: 1rem;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .search-result-item:hover,
+        .search-result-item.selected {
+            background: var(--color-bg-alt);
+        }
+
+        .search-result-item.selected {
+            background: var(--color-primary-light);
+        }
+
+        .search-result-number {
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--color-bg-alt);
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--color-primary);
+            flex-shrink: 0;
+        }
+
+        .search-result-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .search-result-title {
+            font-size: 0.95rem;
+            font-weight: 500;
+            margin-bottom: 0.25rem;
+            color: var(--color-text);
+        }
+
+        .search-result-title mark {
+            background: var(--color-accent);
+            color: var(--color-text);
+            padding: 0 2px;
+            border-radius: 2px;
+        }
+
+        .search-result-subtitle {
+            font-size: 0.85rem;
+            color: var(--color-text-light);
+            margin-bottom: 0.5rem;
+        }
+
+        .search-result-keywords {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.35rem;
+        }
+
+        .search-result-keyword {
+            font-size: 0.7rem;
+            padding: 2px 6px;
+            background: var(--color-border-light);
+            border-radius: 4px;
+            color: var(--color-text-muted);
+        }
+
+        .search-result-keyword mark {
+            background: var(--color-accent);
+            color: var(--color-text);
+            padding: 0 1px;
+            border-radius: 2px;
+        }
+
+        .search-no-results {
+            text-align: center;
+            padding: 2rem;
+            color: var(--color-text-muted);
+        }
+
+        .search-no-results .material-symbols-outlined {
+            font-size: 48px;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        .search-no-results p {
+            font-size: 0.9rem;
+            margin: 0;
+        }
+
+        .search-footer {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1.5rem;
+            padding: 0.75rem 1rem;
+            border-top: 1px solid var(--color-border-light);
+            background: var(--color-bg-alt);
+            font-size: 0.75rem;
+            color: var(--color-text-muted);
+        }
+
+        .search-footer kbd {
+            background: var(--color-surface);
+            padding: 0.15rem 0.4rem;
+            border-radius: 4px;
+            font-family: inherit;
+            font-size: 0.7rem;
+            border: 1px solid var(--color-border);
+            margin: 0 2px;
+        }
+
+        @media (max-width: 768px) {
+            .search-modal {
+                top: 0;
+                left: 0;
+                right: 0;
+                transform: none;
+                width: 100%;
+                max-width: 100%;
+                max-height: 100vh;
+                border-radius: 0;
+            }
+
+            .search-modal.active {
+                transform: none;
+            }
+
+            .search-footer {
+                display: none;
+            }
+
+            .search-btn {
+                margin-right: 0;
+            }
+        }
+
         /* ==================== About Modal ==================== */
         .about-overlay {
             position: fixed;
@@ -1266,6 +1553,9 @@
                 <a href="javascript:void(0)" class="nav-link" onclick="openAbout()">关于</a>
                 <a href="#contact" class="nav-link">联系</a>
             </nav>
+            <button class="search-btn" onclick="openSearch()" aria-label="搜索" title="搜索 (Ctrl+K)">
+                <span class="material-symbols-outlined">search</span>
+            </button>
             <button class="menu-btn" onclick="toggleMobileMenu()" aria-label="菜单">
                 <span class="material-symbols-outlined">menu</span>
             </button>
@@ -1495,6 +1785,29 @@
                     <span>加载中...</span>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <!-- Search Modal -->
+    <div class="search-overlay" id="searchOverlay" onclick="closeSearch()"></div>
+    <div class="search-modal" id="searchModal">
+        <div class="search-header">
+            <div class="search-input-wrapper">
+                <span class="material-symbols-outlined">search</span>
+                <input type="text" id="searchInput" placeholder="搜索章节、关键词..." autocomplete="off" autofocus>
+                <kbd class="search-shortcut">ESC</kbd>
+            </div>
+        </div>
+        <div class="search-results" id="searchResults">
+            <div class="search-hint">
+                <span class="material-symbols-outlined">lightbulb</span>
+                <p>输入关键词搜索章节内容，如"变美动机"、"心理学"、"决策"等</p>
+            </div>
+        </div>
+        <div class="search-footer">
+            <span><kbd>↑</kbd><kbd>↓</kbd> 导航</span>
+            <span><kbd>↵</kbd> 打开</span>
+            <span><kbd>ESC</kbd> 关闭</span>
         </div>
     </div>
 
@@ -1935,6 +2248,197 @@
             originalFilterChapters(category);
             setTimeout(assignPreviewImages, 10);
         };
+
+        // ==================== Search Functionality ====================
+        let searchFuse = null;
+        let selectedIndex = -1;
+        let searchResults = [];
+
+        // Initialize Fuse.js search index
+        function initSearch() {
+            // Build search data with extended keywords
+            const searchData = chapters.map(chapter => ({
+                ...chapter,
+                searchText: `${chapter.title} ${chapter.subtitle} ${chapter.keywords.join(' ')}`
+            }));
+
+            // Configure Fuse.js
+            searchFuse = new Fuse(searchData, {
+                keys: [
+                    { name: 'title', weight: 3 },
+                    { name: 'subtitle', weight: 2 },
+                    { name: 'keywords', weight: 2 },
+                    { name: 'searchText', weight: 1 }
+                ],
+                threshold: 0.4,
+                includeMatches: true,
+                minMatchCharLength: 1
+            });
+        }
+
+        // Open search modal
+        function openSearch() {
+            document.getElementById('searchOverlay').classList.add('active');
+            document.getElementById('searchModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+
+            const input = document.getElementById('searchInput');
+            input.value = '';
+            input.focus();
+
+            // Reset results
+            selectedIndex = -1;
+            searchResults = [];
+            showSearchHint();
+        }
+
+        // Close search modal
+        function closeSearch() {
+            document.getElementById('searchOverlay').classList.remove('active');
+            document.getElementById('searchModal').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        // Show default hint
+        function showSearchHint() {
+            document.getElementById('searchResults').innerHTML = `
+                <div class="search-hint">
+                    <span class="material-symbols-outlined">lightbulb</span>
+                    <p>输入关键词搜索章节内容，如"变美动机"、"心理学"、"决策"等</p>
+                </div>
+            `;
+        }
+
+        // Highlight matched text
+        function highlightMatch(text, query) {
+            if (!query) return text;
+            const regex = new RegExp(`(${query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
+            return text.replace(regex, '<mark>$1</mark>');
+        }
+
+        // Perform search
+        function performSearch(query) {
+            if (!query.trim()) {
+                showSearchHint();
+                searchResults = [];
+                selectedIndex = -1;
+                return;
+            }
+
+            const results = searchFuse.search(query, { limit: 10 });
+            searchResults = results;
+            selectedIndex = results.length > 0 ? 0 : -1;
+
+            if (results.length === 0) {
+                document.getElementById('searchResults').innerHTML = `
+                    <div class="search-no-results">
+                        <span class="material-symbols-outlined">search_off</span>
+                        <p>未找到"${query}"相关内容</p>
+                    </div>
+                `;
+                return;
+            }
+
+            const html = results.map((result, index) => {
+                const chapter = result.item;
+                return `
+                    <a href="reader.html?file=${encodeURIComponent(chapter.file)}"
+                       class="search-result-item ${index === 0 ? 'selected' : ''}"
+                       data-index="${index}"
+                       target="_blank">
+                        <div class="search-result-number">${chapter.number}</div>
+                        <div class="search-result-content">
+                            <div class="search-result-title">${highlightMatch(chapter.title, query)}</div>
+                            <div class="search-result-subtitle">${highlightMatch(chapter.subtitle, query)}</div>
+                            <div class="search-result-keywords">
+                                ${chapter.keywords.map(k =>
+                                    `<span class="search-result-keyword">${highlightMatch(k, query)}</span>`
+                                ).join('')}
+                            </div>
+                        </div>
+                    </a>
+                `;
+            }).join('');
+
+            document.getElementById('searchResults').innerHTML = html;
+        }
+
+        // Update selection
+        function updateSelection(newIndex) {
+            const items = document.querySelectorAll('.search-result-item');
+            if (items.length === 0) return;
+
+            items.forEach(item => item.classList.remove('selected'));
+
+            selectedIndex = newIndex;
+            if (selectedIndex < 0) selectedIndex = items.length - 1;
+            if (selectedIndex >= items.length) selectedIndex = 0;
+
+            items[selectedIndex].classList.add('selected');
+            items[selectedIndex].scrollIntoView({ block: 'nearest' });
+        }
+
+        // Navigate to selected result
+        function navigateToSelected() {
+            if (selectedIndex >= 0 && searchResults[selectedIndex]) {
+                const chapter = searchResults[selectedIndex].item;
+                window.open(`reader.html?file=${encodeURIComponent(chapter.file)}`, '_blank');
+                closeSearch();
+            }
+        }
+
+        // Search input handler
+        document.getElementById('searchInput').addEventListener('input', (e) => {
+            performSearch(e.target.value);
+        });
+
+        // Keyboard navigation for search
+        document.getElementById('searchInput').addEventListener('keydown', (e) => {
+            switch(e.key) {
+                case 'ArrowDown':
+                    e.preventDefault();
+                    updateSelection(selectedIndex + 1);
+                    break;
+                case 'ArrowUp':
+                    e.preventDefault();
+                    updateSelection(selectedIndex - 1);
+                    break;
+                case 'Enter':
+                    e.preventDefault();
+                    navigateToSelected();
+                    break;
+                case 'Escape':
+                    e.preventDefault();
+                    closeSearch();
+                    break;
+            }
+        });
+
+        // Global keyboard shortcut (Ctrl/Cmd + K)
+        document.addEventListener('keydown', (e) => {
+            if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+                e.preventDefault();
+                openSearch();
+            }
+            // Also close on Escape when modal is open
+            if (e.key === 'Escape' && document.getElementById('searchModal').classList.contains('active')) {
+                closeSearch();
+            }
+        });
+
+        // Click on result items
+        document.getElementById('searchResults').addEventListener('click', (e) => {
+            const item = e.target.closest('.search-result-item');
+            if (item) {
+                const index = parseInt(item.dataset.index);
+                if (!isNaN(index)) {
+                    selectedIndex = index;
+                }
+            }
+        });
+
+        // Initialize search on page load
+        initSearch();
 
         // ==================== Service Worker Registration ====================
         if ('serviceWorker' in navigator) {

@@ -1630,19 +1630,22 @@
         /* ==================== Share Panel ==================== */
         .share-panel {
             position: fixed;
-            bottom: -300px;
+            bottom: 0;
             left: 0;
             right: 0;
             background: var(--color-surface);
             border-radius: 20px 20px 0 0;
             padding: 1.5rem;
             z-index: 2500;
-            transition: bottom 0.3s ease;
+            transition: transform 0.3s ease, visibility 0.3s ease;
             box-shadow: 0 -4px 30px rgba(0, 0, 0, 0.15);
+            transform: translateY(100%);
+            visibility: hidden;
         }
 
         .share-panel.active {
-            bottom: 0;
+            transform: translateY(0);
+            visibility: visible;
         }
 
         .share-panel-header {
